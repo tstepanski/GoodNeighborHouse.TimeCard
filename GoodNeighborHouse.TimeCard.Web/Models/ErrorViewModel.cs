@@ -1,5 +1,3 @@
-using System;
-
 namespace GoodNeighborHouse.TimeCard.Web.Models
 {
 	public class ErrorViewModel
