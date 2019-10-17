@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodNeighborHouse.TimeCard.Web", "GoodNeighborHouse.TimeCard.Web\GoodNeighborHouse.TimeCard.Web.csproj", "{62237E02-2DC6-46EE-858A-496EC3158716}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodNeighborHouse.TimeCard.Data", "GoodNeighborHouse.TimeCard.Data\GoodNeighborHouse.TimeCard.Data.csproj", "{2102B922-3E1C-4FB1-8ACA-E411786855C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodNeighborHouse.TimeCard.Identity.Data", "GoodNeighborHouse.TimeCard.Identity.Data\GoodNeighborHouse.TimeCard.Identity.Data.csproj", "{8DA32E13-C5D6-4336-9C87-D715C8EE4FC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodNeighborHouse.TimeCard.General", "GoodNeighborHouse.TimeCard.General\GoodNeighborHouse.TimeCard.General.csproj", "{BB6FD54F-3293-4268-9987-87BEB333E61B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62237E02-2DC6-46EE-858A-496EC3158716}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62237E02-2DC6-46EE-858A-496EC3158716}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62237E02-2DC6-46EE-858A-496EC3158716}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62237E02-2DC6-46EE-858A-496EC3158716}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2102B922-3E1C-4FB1-8ACA-E411786855C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2102B922-3E1C-4FB1-8ACA-E411786855C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2102B922-3E1C-4FB1-8ACA-E411786855C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2102B922-3E1C-4FB1-8ACA-E411786855C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DA32E13-C5D6-4336-9C87-D715C8EE4FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DA32E13-C5D6-4336-9C87-D715C8EE4FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DA32E13-C5D6-4336-9C87-D715C8EE4FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DA32E13-C5D6-4336-9C87-D715C8EE4FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB6FD54F-3293-4268-9987-87BEB333E61B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB6FD54F-3293-4268-9987-87BEB333E61B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB6FD54F-3293-4268-9987-87BEB333E61B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB6FD54F-3293-4268-9987-87BEB333E61B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <UserSecretsId>aspnet-GoodNeighborHouse.TimeCard.Web-142ECCC4-0362-4747-86F9-6A1ABC3C0424</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\GoodNeighborHouse.TimeCard.General\GoodNeighborHouse.TimeCard.General.csproj" />
+        <ProjectReference
+            Include="..\GoodNeighborHouse.TimeCard.Identity.Data\GoodNeighborHouse.TimeCard.Identity.Data.csproj" />
+    </ItemGroup>
+
+</Project>
