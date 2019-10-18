@@ -3,3 +3,6 @@ obj/
 /packages/
 .idea/
 LOCAL_CONNECTION_STRING
+.vs
+PublishProfiles
+*.user
