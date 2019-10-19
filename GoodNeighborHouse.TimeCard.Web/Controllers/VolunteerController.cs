@@ -9,23 +9,33 @@ using GoodNeighborHouse.TimeCard.General;
 using Microsoft.AspNetCore.Mvc;
 using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
 using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
-using GoodNeighborHouse.TimeCard.Data.Entities;
+using OrganizationModel = GoodNeighborHouse.TimeCard.Web.Models.Organization;
+using OrganizationEntity = GoodNeighborHouse.TimeCard.Data.Entities.Organization;
+using DepartmentModel = GoodNeighborHouse.TimeCard.Web.Models.Department;
+using DepartmentEntity = GoodNeighborHouse.TimeCard.Data.Entities.Department;
+using GoodNeighborHouse.TimeCard.Web.Models;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
 	public sealed class VolunteerController : Controller
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IConverter<VolunteerEntity, VolunteerModel> _converter;
+		private readonly IConverter<VolunteerEntity, VolunteerModel> _volunteerConverter;
 		private readonly IMapper<VolunteerModel, VolunteerEntity> _mapper;
+        private readonly IConverter<OrganizationEntity, OrganizationModel> _organizationConverter;
+        private readonly IConverter<DepartmentEntity, DepartmentModel> _departmentConverter;
 
-		public VolunteerController(IUnitOfWorkFactory unitOfWorkFactory,
-			IConverter<VolunteerEntity, VolunteerModel> converter, IMapper<VolunteerModel, VolunteerEntity> mapper)
+        public VolunteerController(IUnitOfWorkFactory unitOfWorkFactory,
+			IConverter<VolunteerEntity, VolunteerModel> volunteerConverter, IMapper<VolunteerModel, VolunteerEntity> mapper,
+            IConverter<OrganizationEntity, OrganizationModel> organizationConverter,
+            IConverter<DepartmentEntity, DepartmentModel> departmentConverter)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_converter = converter;
+			_volunteerConverter = volunteerConverter;
 			_mapper = mapper;
-		}
+            _organizationConverter = organizationConverter;
+            _departmentConverter = departmentConverter;
+        }
 
 		[HttpGet]
 		public async Task<IActionResult> ViewAll(CancellationToken cancellationToken = default)
@@ -36,7 +46,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 						.GetRepository<IVolunteerRepository>()
 						.GetAllAsync()
 						.ToImmutableArrayAsync(cancellationToken))
-					.Select(_converter.Convert)
+					.Select(_volunteerConverter.Convert)
 					.ToImmutableArray();
 
 				return View(@"ViewAll", volunteers);
@@ -48,32 +58,40 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
         {
             var getOrganizationsTask = Task.Run(async () =>
             {
-                using (var organizationsUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
+                using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
                 {
-                    return await organizationsUnitOfWork
-                        .GetRepository<IGetRepository<Organization, Guid>>()
+                    return (await unitOfWork
+                        .GetRepository<IOrganizationRepository>()
                         .GetAllAsync()
-                        .ToImmutableArrayAsync(cancellationToken);
+                        .ToImmutableArrayAsync(cancellationToken))
+                        .Select(_organizationConverter.Convert)
+                        .ToImmutableArray();
                 }
             }, cancellationToken);
 
             var getDepartmentsTask = Task.Run(async () =>
             {
-                using (var organizationsUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
+                using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
                 {
-                    return await organizationsUnitOfWork
-                        .GetRepository<IGetRepository<Department, Guid>>()
+                    return (await unitOfWork
+                        .GetRepository<IDepartmentRepository>()
                         .GetAllAsync()
-                        .ToImmutableArrayAsync(cancellationToken);
+                        .ToImmutableArrayAsync(cancellationToken))
+                        .Select(department => department.Id)
+                        .Select(Selection<Guid>.CreateUnselected)
+                        .ToImmutableArray();
                 }
             }, cancellationToken);
 
             await Task.WhenAll(getOrganizationsTask, getDepartmentsTask);
 
-            var organizations = getOrganizationsTask.Result;
-            var departments = getDepartmentsTask.Result;
+            var model = new VolunteerModel
+            {
+                Organizations = getOrganizationsTask.Result.ToList(),
+                Departments = getDepartmentsTask.Result.ToList()
+            };
 
-            return View(@"Edit", new VolunteerModel());
+            return View(@"Edit", model);
         }
 
 		[HttpPost]
@@ -89,7 +107,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				await repository.AddAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
-				volunteer = _converter.Convert(entity);
+				volunteer = _volunteerConverter.Convert(entity);
 
 				return View(@"Edit", volunteer);
 			}
@@ -108,7 +126,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
                     return NotFound();
                 }
 
-                var volunteer = _converter.Convert(entity);
+                var volunteer = _volunteerConverter.Convert(entity);
 
 				return View(volunteer);
 			}
@@ -133,7 +151,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				await repository.UpdateAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
-				volunteer = _converter.Convert(entity);
+				volunteer = _volunteerConverter.Convert(entity);
 
                 return View(volunteer);
 			}
