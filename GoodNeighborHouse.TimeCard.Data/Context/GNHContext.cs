@@ -37,7 +37,6 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		public DbSet<Organization> Organizations { get; set; }
 		public DbSet<Punch> Punches { get; set; }
 		public DbSet<Volunteer> Volunteers { get; set; }
-
         public DbSet<Reconciliation> Reconciliations { get; set; }
 		IDatabaseSet<Department> IGNHContext.Departments => _departmentsWrapper;
 		IDatabaseSet<Organization> IGNHContext.Organizations => _organizationsWrapper;
