@@ -30,8 +30,12 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 		[Column(@"UpdatedAt", TypeName = @"DATETIME"), Required]
 		public DateTime UpdatedAt { get; set; }
 
-		[ForeignKey(nameof(VolunteerId))] public Volunteer Volunteer { get; set; }
+		[ForeignKey(nameof(VolunteerId))] public virtual Volunteer Volunteer { get; set; }
 
-		[ForeignKey(nameof(DepartmentId))] public Department Department { get; set; }
+		[ForeignKey(nameof(DepartmentId))] public virtual Department Department { get; set; }
+
+		[ForeignKey(nameof(CreatedBy))] public virtual Volunteer PunchCreatedBy { get; set; }
+
+		[ForeignKey(nameof(LastUpdatedBy))] public virtual Volunteer PunchLastUpdatedBy { get; set; }	
 	}
 }
