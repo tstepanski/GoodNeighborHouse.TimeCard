@@ -13,6 +13,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		IDatabaseSet<Department> Departments { get; }
 		IDatabaseSet<Organization> Organizations { get; }
 		IDatabaseSet<Punch> Punches { get; }
+        IDatabaseSet<Reconciliation> Reconciliations { get; }
 		void SaveChanges();
 		Task SaveChangesAsync(CancellationToken cancellationToken = default);
 		Task CreateDatabaseIfNeededAsync(CancellationToken cancellationToken = default);
