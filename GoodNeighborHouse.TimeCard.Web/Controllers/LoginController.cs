@@ -31,7 +31,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> Login(LoginViewModel model)
 		{
-			if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
 			{
 				return LoginView(model);
 			}

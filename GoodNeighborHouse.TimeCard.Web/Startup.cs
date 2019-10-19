@@ -46,7 +46,7 @@ namespace GoodNeighborHouse.TimeCard.Web
 
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(o => o.LoginPath = new PathString("/login"));
+                .AddCookie(o => o.LoginPath = new PathString("/login/login"));
 
 			services.AddRazorPages();
 		}
