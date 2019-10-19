@@ -35,7 +35,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Converters
             entity.LastUpdatedBy = model.LastUpdatedBy;
             entity.UpdatedAt = model.UpdatedAt;
             entity.VolunteerId = model.VolunteerId;
-            entity.Id = model.Id;
+            
         }
     }
 }
