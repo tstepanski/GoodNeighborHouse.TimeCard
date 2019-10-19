@@ -17,4 +17,6 @@
         <ProjectReference Include="..\GoodNeighborHouse.TimeCard.Identity.Data\GoodNeighborHouse.TimeCard.Identity.Data.csproj" />
     </ItemGroup>
 
+    <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>

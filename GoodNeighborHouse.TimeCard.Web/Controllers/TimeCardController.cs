@@ -1,20 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GoodNeighborHouse.TimeCard.Web.Models;
+﻿using GoodNeighborHouse.TimeCard.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using GoodNeighborHouse.TimeCard.Data.Repositories;
+using GoodNeighborHouse.TimeCard.Data.UnitOfWork;
+using GoodNeighborHouse.TimeCard.General;
+using TimeCardModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
+using TimeCardEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
+
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
     public class TimeCardController : Controller
     {
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IConverter<TimeCardEntity, TimeCardModel> _converter;
+        private readonly IMapper<TimeCardModel, TimeCardEntity> _mapper;
+
+        public TimeCardController(IUnitOfWorkFactory unitOfWorkFactory, IConverter<TimeCardEntity, TimeCardModel> converter, IMapper<TimeCardModel, TimeCardEntity> mapper)
+        {
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _converter = converter;
+            _mapper = mapper;
+        }
+
         // GET: TimeCard
         public ActionResult Index()
         {
             //get user timecard info
-            var tc = new TimeCardViewModel();
+            var tc = new TimeCard();
             return View(tc);
         }
 
