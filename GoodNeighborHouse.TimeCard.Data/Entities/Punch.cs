@@ -12,6 +12,12 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
         [Column(@"VolunteerId", TypeName = @"GUID"), Required]
         public Guid VolunteerId { get; set; }
     
+        [Column(@"DeptId"), Required]
+        public String DeptId { get; set; }
+
+        [Column(@"IsClockIn", TypeName=@"BIT"), Required]
+        public bool IsClockIn { get; set; }
+
         [Column(@"PunchTime", TypeName = @"DATETIME"), Required]
         public DateTime PunchTime { get; set; }
     
