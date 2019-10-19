@@ -20,8 +20,4 @@
         <ProjectReference Include="..\GoodNeighborHouse.TimeCard.Identity.Data\GoodNeighborHouse.TimeCard.Identity.Data.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Views\Login\" />
-    </ItemGroup>
-
 </Project>
