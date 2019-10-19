@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GoodNeighborHouse.TimeCard.Identity.Data
 {
-	public class IdentityContext : IdentityDbContext
+    public class IdentityContext : IdentityDbContext
 	{
 		public IdentityContext(DbContextOptions options) : base(options)
 		{
