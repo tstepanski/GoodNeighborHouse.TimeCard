@@ -5,8 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GoodNeighborHouse.TimeCard.Data
 {
-	// ReSharper disable once InconsistentNaming
-	public sealed class GNHDataRegistrar : IRegistrar
+    public sealed class GNHDataRegistrar : IRegistrar
 	{
 		public IRegistrationContext PerformRegistrations(IRegistrationContext registrationContext)
 		{

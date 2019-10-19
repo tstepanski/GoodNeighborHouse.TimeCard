@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace GoodNeighborHouse.TimeCard.Data
 {
-	// ReSharper disable once InconsistentNaming
 	public class GNHContext : DbContext
 	{
         public DbSet<Volunteer> Volunteers { get; set; }
