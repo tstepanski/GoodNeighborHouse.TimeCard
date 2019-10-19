@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace GoodNeighborHouse.TimeCard.Data
 {
 	public class GNHContext : DbContext
 	{
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
         public DbSet<Punch> Punches { get; set; }
 
         public DbSet<Volunteer> Volunteers { get; set; }
@@ -32,6 +36,14 @@ namespace GoodNeighborHouse.TimeCard.Data
             {
                 property.SetDefaultValueSql(@"NEWSEQUENTIALID()");
             }
+
+            modelBuilder.Entity<Department>()
+                .HasData(new List<Department>
+                {
+                    new Department() {Id = new Guid("B4240B56-6FF2-E911-9AE8-D0C637A95AE1"), Name = "Dental"},
+                    new Department() {Id = new Guid("B5240B56-6FF2-E911-9AE8-D0C637A95AE1"), Name = "Human Services"},
+                    new Department() {Id = new Guid("B6240B56-6FF2-E911-9AE8-D0C637A95AE1"), Name = "Medical"}
+                });
         }
     }
 }
