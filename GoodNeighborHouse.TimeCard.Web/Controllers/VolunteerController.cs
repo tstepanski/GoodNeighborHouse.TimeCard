@@ -9,6 +9,7 @@ using GoodNeighborHouse.TimeCard.General;
 using Microsoft.AspNetCore.Mvc;
 using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
 using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
+using GoodNeighborHouse.TimeCard.Data.Entities;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
@@ -38,9 +39,42 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 					.Select(_converter.Convert)
 					.ToImmutableArray();
 
-				return View(volunteers);
+				return View(@"ViewAll", volunteers);
 			}
 		}
+
+        [HttpGet]
+        public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
+        {
+            var getOrganizationsTask = Task.Run(async () =>
+            {
+                using (var organizationsUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
+                {
+                    return await organizationsUnitOfWork
+                        .GetRepository<IGetRepository<Organization, Guid>>()
+                        .GetAllAsync()
+                        .ToImmutableArrayAsync(cancellationToken);
+                }
+            }, cancellationToken);
+
+            var getDepartmentsTask = Task.Run(async () =>
+            {
+                using (var organizationsUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
+                {
+                    return await organizationsUnitOfWork
+                        .GetRepository<IGetRepository<Department, Guid>>()
+                        .GetAllAsync()
+                        .ToImmutableArrayAsync(cancellationToken);
+                }
+            }, cancellationToken);
+
+            await Task.WhenAll(getOrganizationsTask, getDepartmentsTask);
+
+            var organizations = getOrganizationsTask.Result;
+            var departments = getDepartmentsTask.Result;
+
+            return View(@"Edit", new VolunteerModel());
+        }
 
 		[HttpPost]
 		public async Task<IActionResult> Create(VolunteerModel volunteer, CancellationToken cancellationToken = default)

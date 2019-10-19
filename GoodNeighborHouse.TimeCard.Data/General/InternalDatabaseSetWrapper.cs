@@ -39,9 +39,9 @@ namespace GoodNeighborHouse.TimeCard.Data.General
 				return ((IEnumerable) UnderlyingDatabaseSet).GetEnumerator();
 			}
 
-			public Type ElementType => ((IQueryable) UnderlyingDatabaseSet).ElementType;
-			public Expression Expression => ((IQueryable) UnderlyingDatabaseSet).Expression;
-			public IQueryProvider Provider => ((IQueryable) UnderlyingDatabaseSet).Provider;
+			public Type ElementType => ((IQueryable<TEntity>) UnderlyingDatabaseSet).ElementType;
+			public Expression Expression => ((IQueryable<TEntity>) UnderlyingDatabaseSet).Expression;
+			public IQueryProvider Provider => ((IQueryable<TEntity>) UnderlyingDatabaseSet).Provider;
 
 			public TEntity Find<TKey>(TKey key)
 			{
@@ -92,6 +92,13 @@ namespace GoodNeighborHouse.TimeCard.Data.General
 			{
 				UnderlyingDatabaseSet.RemoveRange(entities);
 			}
-		}
+
+            public IAsyncEnumerator<TEntity> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            {
+                return UnderlyingDatabaseSet
+                    .AsAsyncEnumerable()
+                    .GetAsyncEnumerator(cancellationToken);
+            }
+        }
 	}
 }
