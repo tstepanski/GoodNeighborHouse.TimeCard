@@ -16,7 +16,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		private readonly IDatabaseSet<Organization> _organizationsWrapper;
 		private readonly IDatabaseSet<Punch> _punchesWrapper;
 		private readonly IDatabaseSet<Volunteer> _volunteersWrapper;
-        private readonly IDatabaseSet<Reconciliation> _reconciliationsWrapper;
+		private readonly IDatabaseSet<Reconciliation> _reconciliationsWrapper;
 		public GNHContext(DbContextOptions options, bool readOnly = false) : base(options)
 		{
 			_readOnly = readOnly;
@@ -24,7 +24,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 			_organizationsWrapper = DatabaseSetWrapper.CreateFrom(() => Organizations);
 			_punchesWrapper = DatabaseSetWrapper.CreateFrom(() => Punches);
 			_volunteersWrapper = DatabaseSetWrapper.CreateFrom(() => Volunteers);
-            _reconciliationsWrapper = DatabaseSetWrapper.CreateFrom(() => Reconciliations);
+			_reconciliationsWrapper = DatabaseSetWrapper.CreateFrom(() => Reconciliations);
 		}
 
 #if DEBUG
@@ -43,7 +43,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		IDatabaseSet<Organization> IGNHContext.Organizations => _organizationsWrapper;
 		IDatabaseSet<Punch> IGNHContext.Punches => _punchesWrapper;
 		IDatabaseSet<Volunteer> IGNHContext.Volunteers => _volunteersWrapper;
-        IDatabaseSet<Reconciliation> IGNHContext.Reconciliations => _reconciliationsWrapper;
+		IDatabaseSet<Reconciliation> IGNHContext.Reconciliations => _reconciliationsWrapper;
 
 		public new void SaveChanges()
 		{
