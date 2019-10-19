@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace GoodNeighborHouse.TimeCard.Data
+namespace GoodNeighborHouse.TimeCard.Data.General
 {
 	internal sealed class DatabaseOptions : IDatabaseOptions
 	{
