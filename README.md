@@ -19,6 +19,7 @@
 
 
     dotnet restore
+    
     dotnet build  
 
 ## Concepts
