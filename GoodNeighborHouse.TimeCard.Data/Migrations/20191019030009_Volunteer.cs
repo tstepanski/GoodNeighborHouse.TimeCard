@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+// ReSharper disable All
+
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     public partial class Volunteer : Migration
