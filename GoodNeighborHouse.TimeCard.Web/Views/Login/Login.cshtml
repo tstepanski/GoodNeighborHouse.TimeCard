@@ -2,6 +2,8 @@
 
 <h2>Login</h2>
 
+@Html.BeginForm(@"Login", @"Login", FormMethod.Post)
+{
 <div class="form-group">
     <label>Username</label>
     @Html.TextBoxFor(model => model.Username, new
@@ -17,3 +19,10 @@
         @class = @"form-control"
     })
 </div>
+
+<button type="submit"
+        value="Submit"
+        class="btn btn-lg">
+    Login
+</button>
+}
