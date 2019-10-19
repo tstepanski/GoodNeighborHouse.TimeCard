@@ -9,6 +9,8 @@ namespace GoodNeighborHouse.TimeCard.Data
 	{
         public DbSet<Department> Departments { get; set; }
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Punch> Punches { get; set; }
+
         public DbSet<Volunteer> Volunteers { get; set; }
 
 		public GNHContext(DbContextOptions options) : base(options)
