@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GoodNeighborHouse.TimeCard.Data
+namespace GoodNeighborHouse.TimeCard.Data.Entities
 {
 	[Table("Volunteers")]
 	public class Volunteer : AbstractIdentifiable, IValidatableObject

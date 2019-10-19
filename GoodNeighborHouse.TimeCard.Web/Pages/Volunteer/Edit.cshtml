@@ -1,0 +1,25 @@
+﻿@model GoodNeighborHouse.TimeCard.Web.Models.Volunteer
+
+@{
+    ViewBag.Title = "Edit Volunteer";
+    Layout = "_Layout";
+}
+
+<h2>@Model.FirstName @Model.LastName</h2>
+
+@Html.HiddenFor(volunteer => volunteer.Id)
+
+<div class="form-group">
+    <label>First Name</label>
+    @Html.TextBoxFor(volunteer => volunteer.FirstName)
+</div>
+
+<div class="form-group">
+    <label>Last Name</label>
+    @Html.TextBoxFor(volunteer => volunteer.LastName)
+</div>
+
+<div class="form-group">
+    <label>Date of Birth Name</label>
+    @Html.TextBoxFor(volunteer => volunteer.DateOfBirth)
+</div>

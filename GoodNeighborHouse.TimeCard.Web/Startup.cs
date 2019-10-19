@@ -1,11 +1,14 @@
 using GoodNeighborHouse.TimeCard.Data;
 using GoodNeighborHouse.TimeCard.General;
 using GoodNeighborHouse.TimeCard.Identity.Data;
+using GoodNeighborHouse.TimeCard.Web.Converters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
+using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
 
 namespace GoodNeighborHouse.TimeCard.Web
 {
@@ -23,8 +26,10 @@ namespace GoodNeighborHouse.TimeCard.Web
 			RegistrationContext
 				.New(services, Configuration)
 				.Register<IdentityDataRegistrar>()
-                .Register<GNHDataRegistrar>()
-                .Complete()
+				.Register<GNHDataRegistrar>()
+				.RegisterSingleton<IConverter<VolunteerEntity, VolunteerModel>, VolunteerConverter>()
+				.RegisterSingleton<IMapper<VolunteerModel, VolunteerEntity>, VolunteerConverter>()
+				.Complete()
 				.AddHostedService<StartupServices>()
 				.AddControllersWithViews();
 
