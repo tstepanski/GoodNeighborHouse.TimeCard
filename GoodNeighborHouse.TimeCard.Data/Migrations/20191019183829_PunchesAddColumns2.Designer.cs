@@ -4,14 +4,16 @@ using GoodNeighborHouse.TimeCard.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     [DbContext(typeof(GNHContext))]
-    partial class GNHContextModelSnapshot : ModelSnapshot
+    [Migration("20191019183829_PunchesAddColumns2")]
+    partial class PunchesAddColumns2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,24 +192,16 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("IsGroup")
-                        .HasColumnName("IsGroup")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnName("IsPaid")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnName("LastName")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<string>("Username")
+                    b.Property<string>("Pin")
                         .IsRequired()
-                        .HasColumnName("Username")
-                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PIN")
+                        .HasColumnType("nvarchar(6)")
                         .HasMaxLength(6);
 
                     b.HasKey("Id");

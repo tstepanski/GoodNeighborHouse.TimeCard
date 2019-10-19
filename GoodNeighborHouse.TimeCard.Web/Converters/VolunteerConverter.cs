@@ -12,10 +12,12 @@ namespace GoodNeighborHouse.TimeCard.Web.Converters
 			return new VolunteerModel
 			{
 				Id = entity.Id,
-				Pin = entity.Pin,
+				Username = entity.Username,
 				FirstName = entity.FirstName,
 				LastName = entity.LastName,
-				DateOfBirth = entity.DateOfBirth
+				DateOfBirth = entity.DateOfBirth,
+                IsPaid = entity.IsPaid,
+                IsGroup = entity.IsGroup
 			};
 		}
 
@@ -24,7 +26,9 @@ namespace GoodNeighborHouse.TimeCard.Web.Converters
 			entity.FirstName = businessObject.FirstName;
 			entity.LastName = businessObject.LastName;
 			entity.DateOfBirth = businessObject.DateOfBirth;
-			entity.Pin = businessObject.Pin;
+			entity.Username = businessObject.Username;
+            entity.IsPaid = businessObject.IsPaid;
+            entity.IsGroup = businessObject.IsGroup;
 		}
 	}
 }
