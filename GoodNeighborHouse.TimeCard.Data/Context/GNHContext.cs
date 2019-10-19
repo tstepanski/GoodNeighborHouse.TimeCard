@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,11 +12,17 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 	public class GNHContext : DbContext, IGNHContext
 	{
 		private readonly bool _readOnly;
+		private readonly IDatabaseSet<Department> _departmentsWrapper;
+		private readonly IDatabaseSet<Organization> _organizationsWrapper;
+		private readonly IDatabaseSet<Punch> _punchesWrapper;
 		private readonly IDatabaseSet<Volunteer> _volunteersWrapper;
 
 		public GNHContext(DbContextOptions options, bool readOnly = false) : base(options)
 		{
 			_readOnly = readOnly;
+			_departmentsWrapper = DatabaseSetWrapper.CreateFrom(() => Departments);
+			_organizationsWrapper = DatabaseSetWrapper.CreateFrom(() => Organizations);
+			_punchesWrapper = DatabaseSetWrapper.CreateFrom(() => Punches);
 			_volunteersWrapper = DatabaseSetWrapper.CreateFrom(() => Volunteers);
 		}
 
@@ -25,7 +32,15 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		}
 #endif
 
+		public DbSet<Department> Departments { get; set; }
+		public DbSet<Organization> Organizations { get; set; }
+		public DbSet<Punch> Punches { get; set; }
 		public DbSet<Volunteer> Volunteers { get; set; }
+
+		IDatabaseSet<Department> IGNHContext.Departments => _departmentsWrapper;
+		IDatabaseSet<Organization> IGNHContext.Organizations => _organizationsWrapper;
+		IDatabaseSet<Punch> IGNHContext.Punches => _punchesWrapper;
+		IDatabaseSet<Volunteer> IGNHContext.Volunteers => _volunteersWrapper;
 
 		public new void SaveChanges()
 		{
@@ -51,20 +66,54 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 			return Database.CanConnectAsync(cancellationToken);
 		}
 
-		IDatabaseSet<Volunteer> IGNHContext.Volunteers => _volunteersWrapper;
-
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			SetUpSequentialIds(modelBuilder);
+			SeedDepartments(modelBuilder);
+		}
+
+		private static void SetUpSequentialIds(ModelBuilder modelBuilder)
 		{
 			var idProperties = modelBuilder
 				.Model
 				.GetEntityTypes()
 				.Where(entityType => typeof(AbstractIdentifiable).IsAssignableFrom(entityType.ClrType))
-				.Select(entityType => entityType.FindProperty(nameof(AbstractIdentifiable.ID)));
+				.Select(entityType => entityType.FindProperty(nameof(AbstractIdentifiable.Id)));
 
 			foreach (var property in idProperties)
 			{
 				property.SetDefaultValueSql(@"NEWSEQUENTIALID()");
 			}
+		}
+
+		private static void SeedDepartments(ModelBuilder modelBuilder)
+		{
+			var dentalDepartment = new Department
+			{
+				Id = new Guid("B4240B56-6FF2-E911-9AE8-D0C637A95AE1"),
+				Name = "Dental"
+			};
+
+			var humanServicesDepartment = new Department
+			{
+				Id = new Guid("B5240B56-6FF2-E911-9AE8-D0C637A95AE1"),
+				Name = "Human Services"
+			};
+
+			var medicalDepartment = new Department
+			{
+				Id = new Guid("B6240B56-6FF2-E911-9AE8-D0C637A95AE1"),
+				Name = "Medical"
+			};
+
+			var seedDepartments = ImmutableArray.Create(
+				dentalDepartment,
+				humanServicesDepartment,
+				medicalDepartment);
+
+			modelBuilder
+				.Entity<Department>()
+				.HasData(seedDepartments);
 		}
 
 		private void ThrowIfReadOnly()

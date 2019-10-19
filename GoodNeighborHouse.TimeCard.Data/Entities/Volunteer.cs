@@ -8,6 +8,8 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 	[Table("Volunteers")]
 	public class Volunteer : AbstractIdentifiable, IValidatableObject
 	{
+		private const int MinimumAgeInYears = 12;
+
 		[Required]
 		[Column("FirstName", TypeName = "nvarchar(100)")]
 		[StringLength(100, MinimumLength = 1,
@@ -23,25 +25,28 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 		[Required]
 		[Column("DOB", TypeName = "datetime")]
 		[DataType(DataType.Date)]
-		public DateTime DOB { get; set; }
+		public DateTime DateOfBirth { get; set; }
 
 		[Required]
 		[Column("PIN", TypeName = "nvarchar(6)")]
 		[StringLength(6, ErrorMessage = "The PIN value cannot exceed 6 characters. ")]
-		public string PIN { get; set; }
-
+		public string Pin { get; set; }
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
-			List<ValidationResult> results = new List<ValidationResult>();
-			int minAge = 12;
-			if (DOB > DateTime.Now.AddYears(-minAge))
+			if (DateOfBirth <= DateTime.Now.AddYears(-MinimumAgeInYears))
 			{
-				results.Add(new ValidationResult("Volunteers must be at least " + minAge + " years old.",
-					new[] {"StartDateTime"}));
+				yield break;
 			}
 
-			return results;
+			var message = $@"Volunteers must be at least {MinimumAgeInYears} years old.";
+
+			var memberNames = new[]
+			{
+				nameof(DateOfBirth)
+			};
+
+			yield return new ValidationResult(message, memberNames);
 		}
 	}
 }

@@ -10,6 +10,9 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 	public interface IGNHContext : IDisposable
 	{
 		IDatabaseSet<Volunteer> Volunteers { get; }
+		IDatabaseSet<Department> Departments { get; }
+		IDatabaseSet<Organization> Organizations { get; }
+		IDatabaseSet<Punch> Punches { get; }
 		void SaveChanges();
 		Task SaveChangesAsync(CancellationToken cancellationToken = default);
 		Task CreateDatabaseIfNeededAsync(CancellationToken cancellationToken = default);
