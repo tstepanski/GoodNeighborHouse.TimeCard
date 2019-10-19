@@ -8,14 +8,14 @@ namespace GoodNeighborHouse.TimeCard.Identity.Data
 		private LocalDatabaseOptions()
 		{
 			var connectionString = File.ReadAllText(@"LOCAL_CONNECTION_STRING");
-			var dbContextOptionsBuilder = new DbContextOptionsBuilder();
+			var dbContextOptionsBuilder = new DbContextOptionsBuilder<IdentityContext>();
 			
 			Options = dbContextOptionsBuilder
 				.UseSqlServer(connectionString)
 				.Options;
 		}
 		
-		public DbContextOptions Options { get; }
+		public DbContextOptions<IdentityContext> Options { get; }
 		
 		public static IDatabaseOptions Instance { get; } = new LocalDatabaseOptions();
 	}
