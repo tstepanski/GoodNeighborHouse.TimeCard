@@ -7,7 +7,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Repositories
 {
     internal sealed class DepartmentRepository : AbstractRepository<Department, Guid>, IDepartmentRepository
     {
-        internal DepartmentRepository(IGNHContext context) : base(context)
+        public DepartmentRepository(IGNHContext context) : base(context)
         {
         }
 
