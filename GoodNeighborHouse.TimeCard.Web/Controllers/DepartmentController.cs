@@ -69,6 +69,12 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
             {
                 var repository = unitOfWork.GetRepository<IDepartmentRepository>();
                 var entity = await repository.GetAsync(id, cancellationToken);
+
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
                 var department = _converter.Convert(entity);
 
                 return View(department);
@@ -83,6 +89,11 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
             {
                 var repository = unitOfWork.GetRepository<IDepartmentRepository>();
                 var entity = await repository.GetAsync(department.Id, cancellationToken);
+
+                if (entity == null)
+                {
+                    return NotFound();
+                }
 
                 _mapper.MapTo(department, entity);
 
