@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using GoodNeighborHouse.TimeCard.Data.General;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoodNeighborHouse.TimeCard.Data
@@ -9,14 +10,14 @@ namespace GoodNeighborHouse.TimeCard.Data
 		{
 			var connectionString = File.ReadAllText(@"LOCAL_CONNECTION_STRING");
 			var dbContextOptionsBuilder = new DbContextOptionsBuilder();
-			
+
 			Options = dbContextOptionsBuilder
 				.UseSqlServer(connectionString)
 				.Options;
 		}
-		
+
 		public DbContextOptions Options { get; }
-		
+
 		public static IDatabaseOptions Instance { get; } = new LocalDatabaseOptions();
 	}
 }
