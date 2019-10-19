@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     [DbContext(typeof(GNHContext))]
-    [Migration("20191019161327_PunchForeignKeys")]
-    partial class PunchForeignKeys
+    [Migration("20191019183829_PunchesAddColumns2")]
+    partial class PunchesAddColumns2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -88,9 +88,11 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasColumnType("DATETIME");
 
-                    b.Property<Guid>("CreatedBy")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnName("CreatedBy")
-                        .HasColumnType("UNIQUEIDENTIFIER");
+                        .HasColumnType("varchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<Guid>("DepartmentId")
                         .HasColumnName("DepartmentId")
@@ -104,13 +106,19 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnName("IsDeleted")
                         .HasColumnType("BIT");
 
-                    b.Property<Guid>("LastUpdatedBy")
+                    b.Property<string>("LastUpdatedBy")
+                        .IsRequired()
                         .HasColumnName("LastUpdatedBy")
-                        .HasColumnType("UNIQUEIDENTIFIER");
+                        .HasColumnType("varchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("PunchTime")
                         .HasColumnName("PunchTime")
                         .HasColumnType("DATETIME");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnName("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnName("UpdatedAt")
@@ -122,15 +130,48 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
-
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("LastUpdatedBy");
 
                     b.HasIndex("VolunteerId");
 
                     b.ToTable("Punches");
+                });
+
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Reconciliation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id")
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<int>("ApprovedBy")
+                        .HasColumnName("ApprovedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ApprovedOn")
+                        .HasColumnName("ApprovedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("Difference")
+                        .HasColumnName("Difference")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("PunchInId")
+                        .HasColumnName("In")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<Guid>("PunchOutId")
+                        .HasColumnName("Out")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PunchInId");
+
+                    b.HasIndex("PunchOutId");
+
+                    b.ToTable("Recon");
                 });
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", b =>
@@ -170,27 +211,30 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Punch", b =>
                 {
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", "PunchCreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", "PunchLastUpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("LastUpdatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", "Volunteer")
                         .WithMany()
                         .HasForeignKey("VolunteerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Reconciliation", b =>
+                {
+                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Punch", "PunchIn")
+                        .WithMany()
+                        .HasForeignKey("PunchInId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Punch", "PunchOut")
+                        .WithMany()
+                        .HasForeignKey("PunchOutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
