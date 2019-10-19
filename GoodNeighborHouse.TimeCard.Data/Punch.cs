@@ -2,18 +2,20 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GoodNeighborHouse.TimeCard.Data.Entities
+namespace GoodNeighborHouse.TimeCard.Data
 {
-    [Table(@"Punch")]
-    public class Punch {
-        [Key, Column(@"ID", TypeName = @"GUID"), Required]
-        public Guid Id { get; set; }
-
-        [Column(@"VolunteerId", TypeName = @"GUID"), Required]
+    [Table(@"Punches")]
+    public class Punch : AbstractIdentifiable
+    {
+        [Column(@"VolunteerId"), Required]
         public Guid VolunteerId { get; set; }
+        public Volunteer Volunteer { get; set; }
     
-        [Column(@"DeptId"), Required]
-        public String DeptId { get; set; }
+        [Column(@"DepartmentId"), Required]
+        public Guid DepartmentId { get; set; }
+
+        // TODO: Uncomment once Department merges
+        //public Department Deptartment { get; set; }
 
         [Column(@"IsClockIn", TypeName=@"BIT"), Required]
         public bool IsClockIn { get; set; }
@@ -24,13 +26,13 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
         [Column(@"IsDeleted", TypeName = @"BIT"), Required]
         public bool IsDeleted { get; set; }
     
-        [Column(@"CreatedBy", TypeName = @"GUID"), Required]
+        [Column(@"CreatedBy"), Required]
         public Guid CreatedBy { get; set; }
     
         [Column(@"CreatedAt", TypeName = @"DATETIME"), Required]
         public DateTime CreatedAt { get; set; }
     
-        [Column(@"LastUpdatedBy", TypeName = @"GUID"), Required]
+        [Column(@"LastUpdatedBy"), Required]
         public Guid LastUpdatedBy { get; set; }
     
         [Column(@"UpdatedAt", TypeName = @"DATETIME"), Required]

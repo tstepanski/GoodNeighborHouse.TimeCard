@@ -5,6 +5,8 @@ namespace GoodNeighborHouse.TimeCard.Data
 {
 	public class GNHContext : DbContext
 	{
+        public DbSet<Punch> Punches { get; set; }
+
         public DbSet<Volunteer> Volunteers { get; set; }
 
 		public GNHContext(DbContextOptions options) : base(options)
