@@ -22,8 +22,8 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
         [Column(@"Difference")]
         public long Difference { get; set; }
         //difference in milliseconds.
-        [ForeignKey(nameof(PunchInId))] public Punch PunchIn { get; set; }
-        [ForeignKey(nameof(PunchOutId))] public Punch PunchOut { get; set; }
+        [ForeignKey(nameof(PunchInId))] public virtual Punch PunchIn { get; set; }
+        [ForeignKey(nameof(PunchOutId))] public virtual Punch PunchOut { get; set; }
 
     }
 }

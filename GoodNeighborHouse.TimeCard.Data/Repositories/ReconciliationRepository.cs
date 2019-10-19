@@ -7,7 +7,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Repositories
 {
     internal sealed class ReconciliationRepository : AbstractRepository<Reconciliation, Guid>, IReconciliationRepository
     {
-        internal ReconciliationRepository(IGNHContext context) : base(context)
+        public ReconciliationRepository(IGNHContext context) : base(context)
         {
         }
         protected override IDatabaseSet<Reconciliation> DbSet => Context.Reconciliations;
