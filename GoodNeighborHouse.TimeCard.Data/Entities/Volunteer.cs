@@ -6,11 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GoodNeighborHouse.TimeCard.Data.Entities
 {
 	[Table("Volunteers")]
-	public class Volunteer : AbstractIdentifiable, IValidatableObject
+	public class Volunteer : AbstractIdentifiable
 	{
 		private const int MinimumAgeInYears = 2;
 
-		[Required]
 		[Column("FirstName", TypeName = "nvarchar(100)")]
 		[StringLength(100, MinimumLength = 1,
 			ErrorMessage = "The FirstName value must be between 1 and 100 characters. ")]
@@ -22,12 +21,10 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 			ErrorMessage = "The LastName value must be between 1 and 100 characters. ")]
 		public string LastName { get; set; }
 
-		[Required]
-		[Column("DOB", TypeName = "datetime")]
-		[DataType(DataType.Date)]
-		public DateTime DateOfBirth { get; set; }
+        [Column(@"OrganizationId")] 
+        public Guid? OrganizationId { get; set; }
 
-		[Required]
+        [Required]
 		[Column("Username", TypeName = "nvarchar(250)")]
 		[StringLength(6, ErrorMessage = "The Username value cannot exceed 250 characters. ")]
 		public string Username { get; set; }
@@ -40,21 +37,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
         [Column("IsGroup", TypeName = "bit")]
         public bool IsGroup { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-		{
-			if (DateOfBirth <= DateTime.Now.AddYears(-MinimumAgeInYears))
-			{
-				yield break;
-			}
+        public virtual ICollection<DepartmentVolunteer> DepartmentVolunteers { get; set; }
 
-			var message = $@"Volunteers must be at least {MinimumAgeInYears} years old.";
-
-			var memberNames = new[]
-			{
-				nameof(DateOfBirth)
-			};
-
-			yield return new ValidationResult(message, memberNames);
-		}
 	}
 }

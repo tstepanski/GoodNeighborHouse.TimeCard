@@ -11,5 +11,6 @@ namespace GoodNeighborHouse.TimeCard.Web.Models
 		public string Username { get; set; }
         public bool IsPaid { get; set; }
         public bool IsGroup { get; set; }
+        public Guid? OrganizationId { get; set; }
 	}
 }

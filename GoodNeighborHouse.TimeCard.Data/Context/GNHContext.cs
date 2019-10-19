@@ -17,7 +17,9 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		private readonly IDatabaseSet<Punch> _punchesWrapper;
 		private readonly IDatabaseSet<Volunteer> _volunteersWrapper;
 		private readonly IDatabaseSet<Reconciliation> _reconciliationsWrapper;
-		public GNHContext(DbContextOptions options, bool readOnly = false) : base(options)
+        private readonly IDatabaseSet<DepartmentVolunteer> _departmentVolunteersWrapper;
+
+        public GNHContext(DbContextOptions options, bool readOnly = false) : base(options)
 		{
 			_readOnly = readOnly;
 			_departmentsWrapper = DatabaseSetWrapper.CreateFrom(() => Departments);
@@ -25,7 +27,9 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 			_punchesWrapper = DatabaseSetWrapper.CreateFrom(() => Punches);
 			_volunteersWrapper = DatabaseSetWrapper.CreateFrom(() => Volunteers);
 			_reconciliationsWrapper = DatabaseSetWrapper.CreateFrom(() => Reconciliations);
-		}
+            _departmentVolunteersWrapper = DatabaseSetWrapper.CreateFrom(() => DepartmentVolunteers);
+
+        }
 
 #if DEBUG
 		public GNHContext() : this(LocalDatabaseOptions.Instance.Options)
@@ -37,15 +41,18 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		public DbSet<Organization> Organizations { get; set; }
 		public DbSet<Punch> Punches { get; set; }
 		public DbSet<Volunteer> Volunteers { get; set; }
-
         public DbSet<Reconciliation> Reconciliations { get; set; }
-		IDatabaseSet<Department> IGNHContext.Departments => _departmentsWrapper;
+        public DbSet<DepartmentVolunteer> DepartmentVolunteers { get; set; }
+
+
+        IDatabaseSet<Department> IGNHContext.Departments => _departmentsWrapper;
 		IDatabaseSet<Organization> IGNHContext.Organizations => _organizationsWrapper;
 		IDatabaseSet<Punch> IGNHContext.Punches => _punchesWrapper;
 		IDatabaseSet<Volunteer> IGNHContext.Volunteers => _volunteersWrapper;
 		IDatabaseSet<Reconciliation> IGNHContext.Reconciliations => _reconciliationsWrapper;
+        IDatabaseSet<DepartmentVolunteer> IGNHContext.DepartmentVolunteers => _departmentVolunteersWrapper;
 
-		public new void SaveChanges()
+        public new void SaveChanges()
 		{
 			ThrowIfReadOnly();
 
@@ -73,7 +80,19 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		{
 			SetUpSequentialIds(modelBuilder);
 			SeedDepartments(modelBuilder);
-		}
+
+            //many to many for departments to volunteers
+            modelBuilder.Entity<DepartmentVolunteer>()
+                .HasKey(dv => new { dv.DepartmentId, dv.VolunteerId });
+            modelBuilder.Entity<DepartmentVolunteer>()
+                .HasOne(dv => dv.Department)
+                .WithMany(d => d.DepartmentVolunteers)
+                .HasForeignKey(dv => dv.DepartmentId);
+            modelBuilder.Entity<DepartmentVolunteer>()
+                .HasOne(dv => dv.Volunteer)
+                .WithMany(v => v.DepartmentVolunteers)
+                .HasForeignKey(dv => dv.VolunteerId);
+        }
 
 		private static void SetUpSequentialIds(ModelBuilder modelBuilder)
 		{
