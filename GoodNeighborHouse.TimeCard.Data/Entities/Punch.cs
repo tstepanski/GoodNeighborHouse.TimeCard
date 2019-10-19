@@ -8,12 +8,8 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 	public class Punch : AbstractIdentifiable
 	{
 		[Column(@"VolunteerId"), Required] public Guid VolunteerId { get; set; }
-		public Volunteer Volunteer { get; set; }
 
 		[Column(@"DepartmentId"), Required] public Guid DepartmentId { get; set; }
-
-		// TODO: Uncomment once Department merges
-		//public Department Deptartment { get; set; }
 
 		[Column(@"IsClockIn", TypeName = @"BIT"), Required]
 		public bool IsClockIn { get; set; }
@@ -33,5 +29,9 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 
 		[Column(@"UpdatedAt", TypeName = @"DATETIME"), Required]
 		public DateTime UpdatedAt { get; set; }
+
+		[ForeignKey(nameof(VolunteerId))] public Volunteer Volunteer { get; set; }
+
+		[ForeignKey(nameof(DepartmentId))] public Department Department { get; set; }
 	}
 }

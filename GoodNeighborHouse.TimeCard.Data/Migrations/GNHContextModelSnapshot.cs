@@ -20,120 +20,122 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 				.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
 			modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Department", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Departments");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = new Guid("00000000-0000-0000-0000-000000000001"),
-                            Name = "Dental"
-                        },
-                        new
-                        {
-                            ID = new Guid("00000000-0000-0000-0000-000000000002"),
-                            Name = "Human Services"
-                        },
-                        new
-                        {
-                            ID = new Guid("00000000-0000-0000-0000-000000000003"),
-                            Name = "Medical"
-                        });
-                });
-
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Organization", b =>
 			{
-				b.Property<Guid>("ID")
+				b.Property<Guid>("Id")
 					.ValueGeneratedOnAdd()
 					.HasColumnName("Id")
 					.HasColumnType("UNIQUEIDENTIFIER")
 					.HasDefaultValueSql("NEWSEQUENTIALID()");
 
 				b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+					.IsRequired()
+					.HasColumnName("Name")
+					.HasColumnType("nvarchar(100)")
+					.HasMaxLength(100);
 
-                    b.HasKey("ID");
+				b.HasKey("Id");
 
-                    b.ToTable("Organizations");
-                });
+				b.ToTable("Departments");
 
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Punch", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+				b.HasData(
+					new
+					{
+						Id = new Guid("b4240b56-6ff2-e911-9ae8-d0c637a95ae1"),
+						Name = "Dental"
+					},
+					new
+					{
+						Id = new Guid("b5240b56-6ff2-e911-9ae8-d0c637a95ae1"),
+						Name = "Human Services"
+					},
+					new
+					{
+						Id = new Guid("b6240b56-6ff2-e911-9ae8-d0c637a95ae1"),
+						Name = "Medical"
+					});
+			});
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnName("CreatedAt")
-                        .HasColumnType("DATETIME");
+			modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Organization", b =>
+			{
+				b.Property<Guid>("Id")
+					.ValueGeneratedOnAdd()
+					.HasColumnName("Id")
+					.HasColumnType("UNIQUEIDENTIFIER")
+					.HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnName("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
+				b.Property<string>("Name")
+					.IsRequired()
+					.HasColumnName("Name")
+					.HasColumnType("nvarchar(100)")
+					.HasMaxLength(100);
 
-                    b.Property<Guid>("DepartmentId")
-                        .HasColumnName("DepartmentId")
-                        .HasColumnType("uniqueidentifier");
+				b.HasKey("Id");
 
-                    b.Property<bool>("IsClockIn")
-                        .HasColumnName("IsClockIn")
-                        .HasColumnType("BIT");
+				b.ToTable("Organizations");
+			});
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnName("IsDeleted")
-                        .HasColumnType("BIT");
+			modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Punch", b =>
+			{
+				b.Property<Guid>("Id")
+					.ValueGeneratedOnAdd()
+					.HasColumnName("Id")
+					.HasColumnType("UNIQUEIDENTIFIER")
+					.HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<Guid>("LastUpdatedBy")
-                        .HasColumnName("LastUpdatedBy")
-                        .HasColumnType("uniqueidentifier");
+				b.Property<DateTime>("CreatedAt")
+					.HasColumnName("CreatedAt")
+					.HasColumnType("DATETIME");
 
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnName("PunchTime")
-                        .HasColumnType("DATETIME");
+				b.Property<Guid>("CreatedBy")
+					.HasColumnName("CreatedBy")
+					.HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnName("UpdatedAt")
-                        .HasColumnType("DATETIME");
+				b.Property<Guid>("DepartmentId")
+					.HasColumnName("DepartmentId")
+					.HasColumnType("UNIQUEIDENTIFIER");
 
-                    b.Property<Guid>("VolunteerId")
-                        .HasColumnName("VolunteerId")
-                        .HasColumnType("UNIQUEIDENTIFIER");
+				b.Property<bool>("IsClockIn")
+					.HasColumnName("IsClockIn")
+					.HasColumnType("BIT");
 
-                    b.HasKey("Id");
+				b.Property<bool>("IsDeleted")
+					.HasColumnName("IsDeleted")
+					.HasColumnType("BIT");
 
-                    b.HasIndex("VolunteerId");
+				b.Property<Guid>("LastUpdatedBy")
+					.HasColumnName("LastUpdatedBy")
+					.HasColumnType("uniqueidentifier");
 
-                    b.ToTable("Punches");
-                });
+				b.Property<DateTime>("PunchTime")
+					.HasColumnName("PunchTime")
+					.HasColumnType("DATETIME");
 
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Volunteer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+				b.Property<DateTime>("UpdatedAt")
+					.HasColumnName("UpdatedAt")
+					.HasColumnType("DATETIME");
 
-                    b.Property<DateTime>("DateOfBirth")
+				b.Property<Guid>("VolunteerId")
+					.HasColumnName("VolunteerId")
+					.HasColumnType("UNIQUEIDENTIFIER");
+
+				b.HasKey("Id");
+
+				b.HasIndex("DepartmentId");
+
+				b.HasIndex("VolunteerId");
+
+				b.ToTable("Punches");
+			});
+
+			modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Volunteer", b =>
+			{
+				b.Property<Guid>("Id")
+					.ValueGeneratedOnAdd()
+					.HasColumnName("Id")
+					.HasColumnType("UNIQUEIDENTIFIER")
+					.HasDefaultValueSql("NEWSEQUENTIALID()");
+
+				b.Property<DateTime>("DateOfBirth")
 					.HasColumnName("DOB")
 					.HasColumnType("datetime");
 
@@ -160,14 +162,20 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 				b.ToTable("Volunteers");
 			});
 
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Punch", b =>
-                {
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Volunteer", "Volunteer")
-                        .WithMany()
-                        .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+			modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Punch", b =>
+			{
+				b.HasOne("GoodNeighborHouse.TimeCard.Data.Department", "Deptartment")
+					.WithMany("Punches")
+					.HasForeignKey("DepartmentId")
+					.OnDelete(DeleteBehavior.Cascade)
+					.IsRequired();
+
+				b.HasOne("GoodNeighborHouse.TimeCard.Data.Volunteer", "Volunteer")
+					.WithMany()
+					.HasForeignKey("VolunteerId")
+					.OnDelete(DeleteBehavior.Cascade)
+					.IsRequired();
+			});
 #pragma warning restore 612, 618
 		}
 	}
