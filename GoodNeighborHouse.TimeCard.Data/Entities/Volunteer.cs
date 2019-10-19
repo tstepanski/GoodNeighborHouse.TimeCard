@@ -37,7 +37,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
         [Column("IsGroup", TypeName = "bit")]
         public bool IsGroup { get; set; }
 
-        public virtual IEnumerable<DepartmentVolunteer> DepartmentVolunteers { get; set; }
+        public virtual ICollection<DepartmentVolunteer> DepartmentVolunteers { get; set; }
 
 	}
 }
