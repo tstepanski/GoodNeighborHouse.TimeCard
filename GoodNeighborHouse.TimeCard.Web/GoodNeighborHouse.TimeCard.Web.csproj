@@ -10,9 +10,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\GoodNeighborHouse.TimeCard.Data\GoodNeighborHouse.TimeCard.Data.csproj" />
         <ProjectReference Include="..\GoodNeighborHouse.TimeCard.General\GoodNeighborHouse.TimeCard.General.csproj" />
-        <ProjectReference
-            Include="..\GoodNeighborHouse.TimeCard.Identity.Data\GoodNeighborHouse.TimeCard.Identity.Data.csproj" />
+        <ProjectReference Include="..\GoodNeighborHouse.TimeCard.Identity.Data\GoodNeighborHouse.TimeCard.Identity.Data.csproj" />
     </ItemGroup>
 
 </Project>
