@@ -1,0 +1,27 @@
+﻿@using GoodNeighborHouse.TimeCard.Web.Controllers
+@model IEnumerable<GoodNeighborHouse.TimeCard.Web.Models.Organization>
+
+@{
+    ViewBag.Title = "View Organizations";
+    Layout = "_Layout";
+}
+
+<h2>Organizations</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var organization in Model)
+        {
+            <tr>
+                <td>@organization.Name</td>
+                <td>@Html.ActionLink(@"Edit", nameof(OrganizationController.Edit), new { id = organization.Id }, new { @class = @"btn btn-default" })</td>
+            </tr>
+        }
+    </tbody>
+</table>
