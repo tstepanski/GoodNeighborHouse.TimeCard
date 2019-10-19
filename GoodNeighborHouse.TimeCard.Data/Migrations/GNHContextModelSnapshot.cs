@@ -19,7 +19,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Department", b =>
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Department", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Organization", b =>
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Organization", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                     b.ToTable("Organizations");
                 });
 
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Punch", b =>
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Punch", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,11 +86,9 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasColumnType("DATETIME");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnName("CreatedBy")
-                        .HasColumnType("STRING")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DepartmentId")
                         .HasColumnName("DepartmentId")
@@ -104,11 +102,9 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnName("IsDeleted")
                         .HasColumnType("BIT");
 
-                    b.Property<string>("LastUpdatedBy")
-                        .IsRequired()
+                    b.Property<Guid>("LastUpdatedBy")
                         .HasColumnName("LastUpdatedBy")
-                        .HasColumnType("STRING")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("PunchTime")
                         .HasColumnName("PunchTime")
@@ -131,44 +127,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                     b.ToTable("Punches");
                 });
 
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Reconciliation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<int>("ApprovedBy")
-                        .HasColumnName("ApprovedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ApprovedOn")
-                        .HasColumnName("ApprovedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("Difference")
-                        .HasColumnName("Difference")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid>("PunchInId")
-                        .HasColumnName("In")
-                        .HasColumnType("UNIQUEIDENTIFIER");
-
-                    b.Property<Guid>("PunchOutId")
-                        .HasColumnName("Out")
-                        .HasColumnType("UNIQUEIDENTIFIER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PunchInId");
-
-                    b.HasIndex("PunchOutId");
-
-                    b.ToTable("Recon");
-                });
-
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", b =>
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Volunteer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -203,32 +162,17 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                     b.ToTable("Volunteers");
                 });
 
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Punch", b =>
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Punch", b =>
                 {
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Department", "Department")
-                        .WithMany()
+                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Department", "Deptartment")
+                        .WithMany("Punches")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", "Volunteer")
+                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Volunteer", "Volunteer")
                         .WithMany()
                         .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Reconciliation", b =>
-                {
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Punch", "PunchIn")
-                        .WithMany()
-                        .HasForeignKey("PunchInId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Punch", "PunchOut")
-                        .WithMany()
-                        .HasForeignKey("PunchOutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
