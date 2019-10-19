@@ -1,3 +1,4 @@
+using GoodNeighborHouse.TimeCard.Data;
 using GoodNeighborHouse.TimeCard.General;
 using GoodNeighborHouse.TimeCard.Identity.Data;
 using Microsoft.AspNetCore.Builder;
@@ -22,7 +23,8 @@ namespace GoodNeighborHouse.TimeCard.Web
 			RegistrationContext
 				.New(services, Configuration)
 				.Register<IdentityDataRegistrar>()
-				.Complete()
+                .Register<GNHDataRegistrar>()
+                .Complete()
 				.AddHostedService<StartupServices>()
 				.AddControllersWithViews();
 

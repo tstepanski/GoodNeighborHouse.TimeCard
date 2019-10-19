@@ -14,17 +14,17 @@ namespace GoodNeighborHouse.TimeCard.Identity.Data
 				.RegisterSingleton<IIdentityContextFactory, IdentityContextFactory>()
 				.RegisterSingleton<IStartupComponent, MigrationStartupComponent>()
 				.RegisterSingleton<IDatabaseOptions, DatabaseOptions>(() =>
-					new DatabaseOptions(RunBuilder(registrationContext, new DbContextOptionsBuilder()).Options))
+					new DatabaseOptions(RunBuilder(registrationContext, new DbContextOptionsBuilder<IdentityContext>()).Options))
 				.Services
-				.AddDbContext<IdentityContext>(options => RunBuilder(registrationContext, options))
+				.AddDbContext<IdentityContext>(options => RunBuilder(registrationContext, (DbContextOptionsBuilder<IdentityContext>) options))
 				.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<IdentityContext>();
 
 			return registrationContext;
 		}
 
-		private static DbContextOptionsBuilder RunBuilder(IRegistrationContext registrationContext,
-			DbContextOptionsBuilder builder)
+		private static DbContextOptionsBuilder<IdentityContext> RunBuilder(IRegistrationContext registrationContext,
+			DbContextOptionsBuilder<IdentityContext> builder)
 		{
 			return builder.UseSqlServer(registrationContext.Configuration.GetConnectionString(@"IdentityConnection"));
 		}
