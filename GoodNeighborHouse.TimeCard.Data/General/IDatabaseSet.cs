@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GoodNeighborHouse.TimeCard.Data.General
 {
-	public interface IDatabaseSet<TEntity> : IQueryable<TEntity> where TEntity : class
+	public interface IDatabaseSet<TEntity> : IQueryable<TEntity>, IAsyncEnumerable<TEntity> where TEntity : class
 	{
 		TEntity Find<TKey>(TKey key);
 		ValueTask<TEntity> FindAsync(object[] keys, CancellationToken cancellationToken = default);

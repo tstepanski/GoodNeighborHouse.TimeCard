@@ -4,14 +4,16 @@ using GoodNeighborHouse.TimeCard.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     [DbContext(typeof(GNHContext))]
-    partial class GNHContextModelSnapshot : ModelSnapshot
+    [Migration("20191019183516_PunchesRemoveColumns")]
+    partial class PunchesRemoveColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,12 +88,6 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasColumnType("DATETIME");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnName("CreatedBy")
-                        .HasColumnType("varchar(500)")
-                        .HasMaxLength(500);
-
                     b.Property<Guid>("DepartmentId")
                         .HasColumnName("DepartmentId")
                         .HasColumnType("UNIQUEIDENTIFIER");
@@ -103,12 +99,6 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnName("IsDeleted")
                         .HasColumnType("BIT");
-
-                    b.Property<string>("LastUpdatedBy")
-                        .IsRequired()
-                        .HasColumnName("LastUpdatedBy")
-                        .HasColumnType("varchar(500)")
-                        .HasMaxLength(500);
 
                     b.Property<DateTime>("PunchTime")
                         .HasColumnName("PunchTime")
@@ -190,24 +180,16 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("IsGroup")
-                        .HasColumnName("IsGroup")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnName("IsPaid")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnName("LastName")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<string>("Username")
+                    b.Property<string>("Pin")
                         .IsRequired()
-                        .HasColumnName("Username")
-                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PIN")
+                        .HasColumnType("nvarchar(6)")
                         .HasMaxLength(6);
 
                     b.HasKey("Id");

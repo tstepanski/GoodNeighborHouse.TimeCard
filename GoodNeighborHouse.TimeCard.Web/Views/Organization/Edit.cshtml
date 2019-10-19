@@ -1,0 +1,15 @@
+﻿@model GoodNeighborHouse.TimeCard.Web.Models.Organization
+
+@{
+    ViewBag.Title = "Edit Organization";
+    Layout = "_Layout";
+}
+
+<h2>@Model.Name</h2>
+
+@Html.HiddenFor(organization => organization.Id)
+
+<div class="form-group">
+    <label>Name</label>
+    @Html.TextBoxFor(organization => organization.Name)
+</div>

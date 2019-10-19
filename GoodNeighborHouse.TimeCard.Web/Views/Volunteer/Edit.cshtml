@@ -1,11 +1,19 @@
 ﻿@model GoodNeighborHouse.TimeCard.Web.Models.Volunteer
 
 @{
-    ViewBag.Title = "Edit Volunteer";
+    var titleVerb = Model.Id == default ? "Create" : "Edit";
+    ViewBag.Title = $"{titleVerb} Volunteer";
     Layout = "_Layout";
 }
 
-<h2>@Model.FirstName @Model.LastName</h2>
+@if (Model.FirstName != null || Model.LastName != null)
+{
+    <h2>@Model.FirstName @Model.LastName</h2>
+} else
+{
+    <h2>Create Volunteer</h2>
+}
+
 
 @Html.HiddenFor(volunteer => volunteer.Id)
 

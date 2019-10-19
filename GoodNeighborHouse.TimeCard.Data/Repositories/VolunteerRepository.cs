@@ -7,7 +7,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Repositories
 {
 	internal sealed class VolunteerRepository : AbstractRepository<Volunteer, Guid>, IVolunteerRepository
 	{
-		internal VolunteerRepository(IGNHContext context) : base(context)
+		public VolunteerRepository(IGNHContext context) : base(context)
 		{
 		}
 
