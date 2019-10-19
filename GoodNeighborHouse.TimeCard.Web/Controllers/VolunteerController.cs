@@ -77,8 +77,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
                         .GetRepository<IDepartmentRepository>()
                         .GetAllAsync()
                         .ToImmutableArrayAsync(cancellationToken))
-                        .Select(department => department.Id)
-                        .Select(Selection<Guid>.CreateUnselected)
+                        .Select(department => Selection<Guid>.CreateUnselected(department.Id, department.Name))
                         .ToImmutableArray();
                 }
             }, cancellationToken);

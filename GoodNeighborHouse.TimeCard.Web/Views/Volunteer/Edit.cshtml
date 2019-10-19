@@ -2,32 +2,78 @@
 
 @{
     var titleVerb = Model.Id == default ? "Create" : "Edit";
+    var organizationItems = new List<SelectListItem>();
     ViewBag.Title = $"{titleVerb} Volunteer";
     Layout = "_Layout";
+
+    foreach (var organization in Model.Organizations)
+    {
+        organizationItems.Add(new SelectListItem
+        {
+            Text = organization.Name,
+            Value = organization.Id.ToString()
+        });
+    }
 }
 
 @if (Model.FirstName != null || Model.LastName != null)
 {
     <h2>@Model.FirstName @Model.LastName</h2>
-} else
+}
+else
 {
     <h2>Create Volunteer</h2>
 }
 
 
-@Html.HiddenFor(volunteer => volunteer.Id)
+@using (Html.BeginForm(titleVerb, "Volunteer", FormMethod.Post))
+{
+    @Html.HiddenFor(volunteer => volunteer.Id)
+    
+    <div class="form-group">
+        <label>Last Name or Group</label>
+        @Html.TextBoxFor(volunteer => volunteer.LastName)
+    </div>
 
-<div class="form-group">
-    <label>First Name</label>
-    @Html.TextBoxFor(volunteer => volunteer.FirstName)
-</div>
+    <div class="form-group">
+        <label>First Name</label>
+        @Html.TextBoxFor(volunteer => volunteer.FirstName)
+    </div>
 
-<div class="form-group">
-    <label>Last Name</label>
-    @Html.TextBoxFor(volunteer => volunteer.LastName)
-</div>
+    <div class="form-group">
+        <label>Organization (optional)</label>
+        @Html.DropDownListFor(volunteer => volunteer.SelectedOrganizationId, organizationItems, "Select an Organization", Model.SelectedOrganizationId)
+    </div>
 
-<div class="form-group">
-    <label>Date of Birth Name</label>
-    @Html.TextBoxFor(volunteer => volunteer.DateOfBirth)
-</div>
+    <div class="form-group">
+        <label>
+            @Html.RadioButtonFor(volunteer => volunteer.IsGroup, false)
+            Individual
+        </label>
+        <label>
+            @Html.RadioButtonFor(volunteer => volunteer.IsGroup, true)
+            Group
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>
+            @Html.CheckBoxFor(volunteer => volunteer.IsPaid)
+            Paid Volunteer
+        </label>
+    </div>
+
+    <div class="form-group">
+        <h4>Departments</h4>
+        @for(int i = 0; i < Model.Departments.Count; i++)
+        {
+            <label>
+                @Html.CheckBoxFor(volunteer => volunteer.Departments[i].Selected)
+                @Model.Departments[i].Display
+            </label>
+        }
+    </div>
+
+    <button type="submit" />
+}
+
