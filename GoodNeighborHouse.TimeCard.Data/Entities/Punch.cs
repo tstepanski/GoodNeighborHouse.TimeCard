@@ -43,19 +43,20 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities {
         [ForeignKey(nameof(DepartmentId))] public virtual Department Department { get; set; }
 
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext) {
-            //if (Volunteer.IsGroup) {
-                yield break;
-            //} else {
-                //if (Quantity == 1) {
-                    //yield break;
-                //} else {
-                    //var memberNames = new [] {
-                        //nameof(Quantity)
-                    //};
-
-                    //yield return new ValidationResult("Only 1", memberNames);
-                //}
-            //}
+            if(Quantity >= 1) {
+                if (Volunteer.IsGroup) {
+                    yield break;
+                } else {
+                    if (Quantity == 1) {
+                        yield break;
+                    } else {
+                        yield return new ValidationResult("Only 1", new [] { nameof(Quantity) });
+                    }
+                }
+            } else {
+                yield return new ValidationResult("At least 1", new [] { nameof(Quantity) });
+            }
+            
         }
     }
 }
