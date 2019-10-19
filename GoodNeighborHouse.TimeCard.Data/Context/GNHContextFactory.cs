@@ -1,4 +1,6 @@
-﻿namespace GoodNeighborHouse.TimeCard.Data
+﻿using GoodNeighborHouse.TimeCard.Data.General;
+
+namespace GoodNeighborHouse.TimeCard.Data.Context
 {
 	internal sealed class GNHContextFactory : IGNHContextFactory
 	{
@@ -9,9 +11,9 @@
 			_databaseOptions = databaseOptions;
 		}
 
-		public GNHContext Create()
+		public GNHContext Create(bool readOnly)
 		{
-			return new GNHContext(_databaseOptions.Options);
+			return new GNHContext(_databaseOptions.Options, readOnly);
 		}
 	}
 }
