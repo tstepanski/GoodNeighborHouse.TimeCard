@@ -12,7 +12,10 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 			ErrorMessage = "The department name must be between 1 and 100 characters. ")]
 		public string Name { get; set; }
 
-		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public virtual IEnumerable<DepartmentVolunteer> DepartmentVolunteers { get; set; }
+
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			List<ValidationResult> results = new List<ValidationResult>();
 			Validator.TryValidateProperty(this.Name, new ValidationContext(this, null, null) {MemberName = "Name"},
