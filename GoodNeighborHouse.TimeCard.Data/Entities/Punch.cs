@@ -20,18 +20,24 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 		[Column(@"IsDeleted", TypeName = @"BIT"), Required]
 		public bool IsDeleted { get; set; }
 
-		[Column(@"CreatedBy"), Required] public Guid CreatedBy { get; set; }
+		[Column(@"CreatedBy", TypeName = @"STRING"), Required]
+		[StringLength(100, MinimumLength = 1,
+			ErrorMessage = "The CreatedBy value must be between 1 and 100 characters and is either the Id of the volunteer, or user")] 
+		public String CreatedBy { get; set; }
 
 		[Column(@"CreatedAt", TypeName = @"DATETIME"), Required]
 		public DateTime CreatedAt { get; set; }
 
-		[Column(@"LastUpdatedBy"), Required] public Guid LastUpdatedBy { get; set; }
+		[Column(@"LastUpdatedBy", TypeName = @"STRING"), Required] 
+		[StringLength(100, MinimumLength = 1,
+			ErrorMessage = "The LastUpdatedBy value must be between 1 and 100 characters and is either the Id of the volunteer, or user")] 
+		public String LastUpdatedBy { get; set; }
 
 		[Column(@"UpdatedAt", TypeName = @"DATETIME"), Required]
 		public DateTime UpdatedAt { get; set; }
 
-		[ForeignKey(nameof(VolunteerId))] public Volunteer Volunteer { get; set; }
+		[ForeignKey(nameof(VolunteerId))] public virtual Volunteer Volunteer { get; set; }
 
-		[ForeignKey(nameof(DepartmentId))] public Department Department { get; set; }
+		[ForeignKey(nameof(DepartmentId))] public virtual Department Department { get; set; }
 	}
 }
