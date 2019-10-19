@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GoodNeighborHouse.TimeCard.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,19 +13,23 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
         // GET: TimeCard
         public ActionResult Index()
         {
-            return View();
+            //get user timecard info
+            var tc = new TimeCardViewModel();
+            return View(tc);
         }
 
-        // POST: TimeCard/AddPunch
+        // POST: TimeCard/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddPunch(Guid userID, string punchType)
+        public ActionResult Add(Guid userID, string punchType)
         {
             try
             {
                 // TODO: Add punch to db
+                //add punch (userID, punchType, DateTime.Now);
 
-                return RedirectToAction(nameof(Index));
+                return View();
+                //return RedirectToAction(nameof(Index));
             }
             catch
             {
