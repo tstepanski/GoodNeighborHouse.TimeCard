@@ -8,7 +8,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 	[Table("Volunteers")]
 	public class Volunteer : AbstractIdentifiable, IValidatableObject
 	{
-		private const int MinimumAgeInYears = 12;
+		private const int MinimumAgeInYears = 2;
 
 		[Required]
 		[Column("FirstName", TypeName = "nvarchar(100)")]
@@ -28,11 +28,19 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 		public DateTime DateOfBirth { get; set; }
 
 		[Required]
-		[Column("PIN", TypeName = "nvarchar(6)")]
-		[StringLength(6, ErrorMessage = "The PIN value cannot exceed 6 characters. ")]
-		public string Pin { get; set; }
+		[Column("Username", TypeName = "nvarchar(250)")]
+		[StringLength(6, ErrorMessage = "The Username value cannot exceed 250 characters. ")]
+		public string Username { get; set; }
 
-		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        [Required]
+        [Column("IsPaid", TypeName = "bit")]
+        public bool IsPaid { get; set; }
+
+        [Required]
+        [Column("IsGroup", TypeName = "bit")]
+        public bool IsGroup { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			if (DateOfBirth <= DateTime.Now.AddYears(-MinimumAgeInYears))
 			{
