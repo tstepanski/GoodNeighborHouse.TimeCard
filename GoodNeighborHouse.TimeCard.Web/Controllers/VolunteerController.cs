@@ -38,7 +38,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 					.Select(_converter.Convert)
 					.ToImmutableArray();
 
-				return View(volunteers);
+				return View(@"ViewAll", volunteers);
 			}
 		}
 
