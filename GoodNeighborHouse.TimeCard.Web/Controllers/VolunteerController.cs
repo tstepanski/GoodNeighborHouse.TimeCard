@@ -102,7 +102,13 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			{
 				var repository = unitOfWork.GetRepository<IVolunteerRepository>();
 				var entity = await repository.GetAsync(id, cancellationToken);
-				var volunteer = _converter.Convert(entity);
+
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                var volunteer = _converter.Convert(entity);
 
 				return View(volunteer);
 			}
@@ -117,14 +123,19 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				var repository = unitOfWork.GetRepository<IVolunteerRepository>();
 				var entity = await repository.GetAsync(volunteer.Id, cancellationToken);
 
-				_mapper.MapTo(volunteer, entity);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                _mapper.MapTo(volunteer, entity);
 
 				await repository.UpdateAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
 				volunteer = _converter.Convert(entity);
 
-				return View(volunteer);
+                return View(volunteer);
 			}
 		}
 	}
