@@ -25,10 +25,25 @@
 * User
     * Represents an employee of Good Neighbor House
     * Required for initial "Kiosk mode" login
-    * Has access to perform the following administrative tasks
+    * Has access to using "Administration mode"
+* Modes
+    * Administration Mode
         * Volunteer CRUD operations
         * Punch reconciliation
         * Department CRUD operations
         * Organization CRUD operations
         * Data export
         * Reporting
+    * Kiosk Mode
+        * Punch  in/out system for volunteers
+ * Volunteer
+    * Represents an individual providing services to Good Neighbor House needing tracked
+    * Has access to punch in/out in "Kiosk mode"
+* Department
+    * Represents a division within Good Neighbor House requiring reporting of hours worked by volunteers
+* Organization
+    * Represents an external entity providing 1 or more volunteers requiring reporting of hours worked by said volunteers
+* Punch reconciliation
+    * Provides mechanism for verifying correctness of punches made by volunteers
+    * Offers functionality to add/delete punches to fix history
+    * Will automatically detect issues such as an uneven number of in/out punches and exceptionally long/short clocked-in durations
