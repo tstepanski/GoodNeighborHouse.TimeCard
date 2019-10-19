@@ -19,9 +19,14 @@ namespace GoodNeighborHouse.TimeCard.Data
 				.RegisterSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
 				.RegisterSingleton<IStartupComponent, MigrationStartupComponent>()
 				.RegisterSingleton<IDatabaseOptions, DatabaseOptions>(() =>
-					new DatabaseOptions(RunBuilder(registrationContext, new DbContextOptionsBuilder<GNHContext>())
-						.Options))
-				.Services
+					{
+	                var contextOptionsBuilder = new DbContextOptionsBuilder<GNHContext>();
+	                
+	                contextOptionsBuilder = RunBuilder(registrationContext, contextOptionsBuilder);
+	                
+	                return new DatabaseOptions(contextOptionsBuilder
+						.Options);
+				}).Services
 				.AddDbContext<GNHContext>(options =>
 					RunBuilder(registrationContext, (DbContextOptionsBuilder<GNHContext>) options));
 			return registrationContext;
