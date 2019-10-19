@@ -13,9 +13,7 @@ namespace GoodNeighborHouse.TimeCard.Data
     
         [Column(@"DepartmentId"), Required]
         public Guid DepartmentId { get; set; }
-
-        // TODO: Uncomment once Department merges
-        //public Department Deptartment { get; set; }
+        public Department Deptartment { get; set; }
 
         [Column(@"IsClockIn", TypeName=@"BIT"), Required]
         public bool IsClockIn { get; set; }
