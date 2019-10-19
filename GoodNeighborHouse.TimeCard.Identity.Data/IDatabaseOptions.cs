@@ -4,6 +4,6 @@ namespace GoodNeighborHouse.TimeCard.Identity.Data
 {
 	internal interface IDatabaseOptions
 	{
-		DbContextOptions Options { get; }
+		DbContextOptions<IdentityContext> Options { get; }
 	}
 }
