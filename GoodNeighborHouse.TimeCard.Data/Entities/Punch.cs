@@ -30,12 +30,12 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities {
 
         [Column(@"LastUpdatedBy", TypeName = "varchar(500)"), Required]
         [StringLength(500, MinimumLength = 1,
-            ErrorMessage = "The LastUpdatedBy value must be between 1 and 100 characters and is either the Id of the volunteer, or user")]
+            ErrorMessage = "The LastUpdatedBy value must be between 1 and 500 characters and is either the Id of the volunteer or user")]
         public String LastUpdatedBy { get; set; }
 
         [Column(@"CreatedBy", TypeName = "varchar(500)"), Required]
         [StringLength(500, MinimumLength = 1,
-            ErrorMessage = "The CreatedBy value must be between 1 and 100 characters and is either the Id of the volunteer, or user")]
+            ErrorMessage = "The CreatedBy value must be between 1 and 500 characters and is either the Id of the volunteer or user")]
         public String CreatedBy { get; set; }
 
         [ForeignKey(nameof(VolunteerId))] public virtual Volunteer Volunteer { get; set; }
