@@ -36,6 +36,9 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
 		[Column(@"UpdatedAt", TypeName = @"DATETIME"), Required]
 		public DateTime UpdatedAt { get; set; }
 
+		[Column(@"Quantity")]
+        public int Quantity { get; set; }
+
 		[ForeignKey(nameof(VolunteerId))] public virtual Volunteer Volunteer { get; set; }
 
 		[ForeignKey(nameof(DepartmentId))] public virtual Department Department { get; set; }
