@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     [DbContext(typeof(GNHContext))]
-    [Migration("20191019030009_Volunteer")]
-    partial class Volunteer
+    [Migration("20191019122824_DepartmentsAndOrganizations")]
+    partial class DepartmentsAndOrganizations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,61 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Department", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id")
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Departments");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("00000000-0000-0000-0000-000000000001"),
+                            Name = "Dental"
+                        },
+                        new
+                        {
+                            ID = new Guid("00000000-0000-0000-0000-000000000002"),
+                            Name = "Human Services"
+                        },
+                        new
+                        {
+                            ID = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Name = "Medical"
+                        });
+                });
+
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Organization", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id")
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Organizations");
+                });
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Volunteer", b =>
                 {

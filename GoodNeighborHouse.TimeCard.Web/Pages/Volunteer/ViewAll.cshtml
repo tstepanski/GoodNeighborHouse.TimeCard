@@ -1,0 +1,27 @@
+﻿@using GoodNeighborHouse.TimeCard.Web.Controllers
+@model IEnumerable<GoodNeighborHouse.TimeCard.Web.Models.Volunteer>
+
+@{
+    ViewBag.Title = "View Volunteers";
+    Layout = "_Layout";
+}
+
+<h2>Volunteers</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>User</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var volunteer in Model)
+    {
+        <tr>
+            <td>@volunteer.FirstName @volunteer.LastName</td>
+            <td>@Html.ActionLink(@"Edit", nameof(VolunteerController.Edit), new {id = volunteer.Id}, new {@class = @"btn btn-default"})</td>
+        </tr>
+    }
+    </tbody>
+</table>
