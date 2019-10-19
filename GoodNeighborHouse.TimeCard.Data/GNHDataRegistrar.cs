@@ -5,7 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GoodNeighborHouse.TimeCard.Data
 {
-    public sealed class GNHDataRegistrar : IRegistrar
+	// ReSharper disable once InconsistentNaming
+	public sealed class GNHDataRegistrar : IRegistrar
 	{
 		public IRegistrationContext PerformRegistrations(IRegistrationContext registrationContext)
 		{
@@ -13,9 +14,16 @@ namespace GoodNeighborHouse.TimeCard.Data
                 .RegisterSingleton<IGNHContextFactory, GNHContextFactory>()
                 .RegisterSingleton<IStartupComponent, MigrationStartupComponent>()
                 .RegisterSingleton<IDatabaseOptions, DatabaseOptions>(() =>
-                    new DatabaseOptions(RunBuilder(registrationContext, new DbContextOptionsBuilder<GNHContext>()).Options))
+                {
+	                var contextOptionsBuilder = new DbContextOptionsBuilder<GNHContext>();
+	                
+	                contextOptionsBuilder = RunBuilder(registrationContext, contextOptionsBuilder);
+	                
+	                return new DatabaseOptions(contextOptionsBuilder.Options);
+                })
                 .Services
-                .AddDbContext<GNHContext>(options => RunBuilder(registrationContext, (DbContextOptionsBuilder<GNHContext>) options));
+                .AddDbContext<GNHContext>(options =>
+	                RunBuilder(registrationContext, (DbContextOptionsBuilder<GNHContext>) options));
 			return registrationContext;
 		}
 

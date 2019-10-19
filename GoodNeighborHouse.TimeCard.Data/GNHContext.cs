@@ -3,7 +3,8 @@ using System.Linq;
 
 namespace GoodNeighborHouse.TimeCard.Data
 {
-    public class GNHContext : DbContext
+	// ReSharper disable once InconsistentNaming
+	public class GNHContext : DbContext
 	{
         public DbSet<Volunteer> Volunteers { get; set; }
 
@@ -24,7 +25,7 @@ namespace GoodNeighborHouse.TimeCard.Data
                 .Model
                 .GetEntityTypes()
                 .Where(entityType => typeof(AbstractIdentifiable).IsAssignableFrom(entityType.ClrType))
-                .Select(entityType => entityType.FindProperty(nameof(AbstractIdentifiable.ID)));
+                .Select(entityType => entityType.FindProperty(nameof(AbstractIdentifiable.Id)));
 
             foreach(var property in idProperties)
             {

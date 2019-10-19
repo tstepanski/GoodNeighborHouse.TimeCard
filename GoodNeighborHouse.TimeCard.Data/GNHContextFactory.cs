@@ -1,5 +1,6 @@
 ﻿namespace GoodNeighborHouse.TimeCard.Data
 {
+	// ReSharper disable once InconsistentNaming
 	internal sealed class GNHContextFactory : IGNHContextFactory
 	{
 		private readonly IDatabaseOptions _databaseOptions;
