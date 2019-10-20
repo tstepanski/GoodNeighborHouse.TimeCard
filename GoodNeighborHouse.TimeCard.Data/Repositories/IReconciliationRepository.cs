@@ -7,5 +7,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Repositories
 	public interface IReconciliationRepository : IFullRepository<Reconciliation, Guid>
 	{
 		IAsyncEnumerable<Reconciliation> GetAllForPeriod(DateTime start, DateTime end);
-	}
+        void ClearAllForVolunteerInPeriod(Guid Id, DateTime start, DateTime end);
+
+    }
 }
