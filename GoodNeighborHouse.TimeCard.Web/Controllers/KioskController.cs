@@ -6,6 +6,7 @@ using GoodNeighborHouse.TimeCard.Data.Repositories;
 using GoodNeighborHouse.TimeCard.Data.UnitOfWork;
 using GoodNeighborHouse.TimeCard.General;
 using GoodNeighborHouse.TimeCard.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Punch = GoodNeighborHouse.TimeCard.Data.Entities.Punch;
 using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
@@ -13,6 +14,7 @@ using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
+	[Authorize]
 	public sealed class KioskController : Controller
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
