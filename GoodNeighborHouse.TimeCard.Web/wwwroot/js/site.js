@@ -9,3 +9,20 @@ window.GNH.hideOnPunchInSelect = (window.GNH.hideOnPunchInSelect || function() {
     document.getElementById("punch-buttons").style.display = "none";
     document.getElementById("department-select").style.display = "block";
 });
+var GoodNeighborHouseApi = {
+    CreatePunch: function(volunteerId, isClockIn, forTimeInMilliseconds, callback) {
+        $.ajax({
+            type: "POST",
+            url: "/api/punch/create/" + volunteerId + "/" + isClockIn + "/" + forTime,
+            success: callback
+        });
+    };
+    
+    DeletePunch: function(id, callback) {
+        $.ajax({
+            type: "DELETE",
+            url: "/api/punch/" + id,
+            success: callback
+        });
+    };
+};
