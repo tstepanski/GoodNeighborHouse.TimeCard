@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -6,101 +7,152 @@ using System.Threading.Tasks;
 using GoodNeighborHouse.TimeCard.Data.Repositories;
 using GoodNeighborHouse.TimeCard.Data.UnitOfWork;
 using GoodNeighborHouse.TimeCard.General;
+using GoodNeighborHouse.TimeCard.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using ReconciliationModel = GoodNeighborHouse.TimeCard.Web.Models.Reconciliation;
 using ReconciliationEntity = GoodNeighborHouse.TimeCard.Data.Entities.Reconciliation;
 using PunchModel = GoodNeighborHouse.TimeCard.Web.Models.Punch;
 using PunchEntity = GoodNeighborHouse.TimeCard.Data.Entities.Punch;
-using System.Collections.Generic;
+using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
+using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
-    public class ReconciliationController : Controller
-    {
+	public class ReconciliationController : Controller
+	{
+		private readonly IConverter<PunchEntity, PunchModel> _punchConverter;
+		private readonly IConverter<VolunteerEntity, VolunteerModel> _volunteerConverter;
 
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IConverter<ReconciliationEntity, ReconciliationModel> _reconciliationConverter;
-        private readonly IMapper<ReconciliationModel, ReconciliationEntity> _reconciliationMapper;
-        private readonly IConverter<PunchEntity, PunchModel> _punchConverter;
-        private readonly IMapper<PunchModel, PunchEntity> _punchMapper;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public ReconciliationController(IUnitOfWorkFactory unitOfWorkFactory,
-        IConverter<ReconciliationEntity, ReconciliationModel> reconciliationConverter,
-        IMapper<ReconciliationModel, ReconciliationEntity> reconciliationMapper,
-        IConverter<PunchEntity, PunchModel> punchConverter,
-        IMapper<PunchModel, PunchEntity> punchMapper)
-        {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _reconciliationConverter = reconciliationConverter;
-            _reconciliationMapper = reconciliationMapper;
-            _punchConverter = punchConverter;
-            _punchMapper = punchMapper;
-        }
+		public ReconciliationController(IUnitOfWorkFactory unitOfWorkFactory,
+			IConverter<PunchEntity, PunchModel> punchConverter,
+			IConverter<VolunteerEntity, VolunteerModel> volunteerConverter)
+		{
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_punchConverter = punchConverter;
+			_volunteerConverter = volunteerConverter;
+		}
 
+		// POST: Reconciliation/Create
+		[HttpGet]
+		public async Task<IActionResult> Create(Guid volunteerId,
+			DateTime start, DateTime end, CancellationToken cancellationToken = default)
+		{
+			var getPunchesTask = GetPunches(volunteerId, start, end, cancellationToken)
+				.ToImmutableArrayAsync(cancellationToken);
 
-        // GET: Reconciliation
-        public ActionResult Index()
-        {
-            return View();
-        }
+			var getVolunteerTask = Task.Run(async () =>
+			{
+				using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
+				{
+					var volunteer = await unitOfWork
+						.GetRepository<IVolunteerRepository>()
+						.GetAsync(volunteerId, cancellationToken);
 
-        // POST: Reconciliation/Create
-        [HttpGet]
-        public async Task<IActionResult> Create(Guid volunteerId,
-            DateTime start, DateTime end, CancellationToken cancellationToken = default)
-        {
-            using (var PunchUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
-            {
-                var punches = (await PunchUnitOfWork.GetRepository<IPunchRepository>()
-                .GetAllForVolunteerInPeriod(volunteerId, start, end)
-                .ToImmutableArrayAsync(cancellationToken))
-                .Select(_punchConverter.Convert)
-                .ToImmutableArray();
+					return _volunteerConverter.Convert(volunteer);
+				}
+			}, cancellationToken);
 
-                return View(@"Edit", punches);
-            }
-        }
+			await Task.WhenAll(getPunchesTask, getVolunteerTask);
 
-        [HttpPost]
-        public async Task<IActionResult> Save(Guid volunteerId,
-            DateTime start, DateTime end, CancellationToken cancellationToken = default)
-        {
-            IEnumerable<PunchModel> punches = null;
-            using (var UnitOfWork = _unitOfWorkFactory.CreateReadWrite())
-            {
+			var model = new VolunteerAndPunches(getVolunteerTask.Result, getPunchesTask.Result);
 
-                punches = (await UnitOfWork.GetRepository<IPunchRepository>()
-                    .GetAllForVolunteerInPeriod(volunteerId, start, end).ToImmutableArrayAsync()).
-                    Select(p=>_punchConverter.Convert(p)).ToImmutableArray();
-                var reconciliationRepository = UnitOfWork.GetRepository<IReconciliationRepository>();
-                reconciliationRepository.ClearAllForVolunteerInPeriod(volunteerId, start, end);
-                ReconciliationEntity reconciliation = new ReconciliationEntity();
-                var newRecs = new LinkedList<ReconciliationEntity>();
-                foreach (var punch in punches.Where(p => !p.IsDeleted))
-                {
-                    if (punch.IsClockIn) {
-                        reconciliation = new ReconciliationEntity
-                        {
-                            PunchInId = punch.Id,
-                            ApprovedBy = 0
-                        };
-                    } 
-                    else {
-                        reconciliation.ApprovedOn = DateTime.Now;
-                        reconciliation.PunchOutId = punch.Id;
-                        reconciliation.Difference = (long)(reconciliation.PunchOut.PunchTime - reconciliation.PunchIn.PunchTime).TotalMilliseconds;
-                        newRecs.AddFirst(reconciliation);
-                    }
+			return View(@"Recon", model);
+		}
 
-                }
-              await reconciliationRepository.AddAllAsync(newRecs);
-                
-            }
-            if (punches is null) {
-                return NotFound(); 
-            }
-            return View(@"Edit", punches);
-        }
+		private async IAsyncEnumerable<IPunch> GetPunches(Guid volunteerId, DateTime start, DateTime end,
+			CancellationToken cancellationToken = default)
+		{
+			using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
+			{
+				var punchesByDay = (await unitOfWork.GetRepository<IPunchRepository>()
+						.GetAllForVolunteerInPeriod(volunteerId, start, end)
+						.ToImmutableArrayAsync(cancellationToken))
+					.Select(_punchConverter.Convert)
+					.OrderBy(punch => punch.PunchTime)
+					.GroupBy(punch => punch.PunchTime.Date);
 
-    }
+				foreach (var punchesForDay in punchesByDay)
+				{
+					var punchedIn = false;
+
+					foreach (var punch in punchesForDay)
+					{
+						var isClockIn = punch.IsClockIn;
+
+						if (isClockIn == punchedIn)
+						{
+							yield return new MissingPunch
+							{
+								VolunteerId = volunteerId,
+								IsClockIn = !isClockIn,
+								ShouldBeBefore = punch.PunchTime
+							};
+						}
+
+						yield return punch;
+
+						punchedIn = isClockIn;
+					}
+
+					if (punchedIn)
+					{
+						yield return new MissingPunch
+						{
+							VolunteerId = volunteerId,
+							IsClockIn = false,
+							ShouldBeBefore = punchesForDay.Key.Date.AddDays(1).AddMinutes(-1)
+						};
+					}
+				}
+			}
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Save(Guid volunteerId,
+			DateTime start, DateTime end, CancellationToken cancellationToken = default)
+		{
+			using (var unitOfWork = _unitOfWorkFactory.CreateReadWrite())
+			{
+				var punches = (await unitOfWork
+						.GetRepository<IPunchRepository>()
+						.GetAllForVolunteerInPeriod(volunteerId, start, end)
+						.ToImmutableArrayAsync(cancellationToken))
+					.Select(_punchConverter.Convert)
+					.ToImmutableArray();
+
+				var reconciliationRepository = unitOfWork.GetRepository<IReconciliationRepository>();
+
+				reconciliationRepository.ClearAllForVolunteerInPeriod(volunteerId, start, end);
+
+				var reconciliation = new ReconciliationEntity();
+				var newRecs = new LinkedList<ReconciliationEntity>();
+
+				foreach (var punch in punches.Where(p => !p.IsDeleted))
+				{
+					if (punch.IsClockIn)
+					{
+						reconciliation = new ReconciliationEntity
+						{
+							PunchInId = punch.Id,
+							ApprovedBy = 0
+						};
+					}
+					else
+					{
+						reconciliation.ApprovedOn = DateTime.Now;
+						reconciliation.PunchOutId = punch.Id;
+						reconciliation.Difference =
+							(long) (reconciliation.PunchOut.PunchTime - reconciliation.PunchIn.PunchTime)
+							.TotalMilliseconds;
+						newRecs.AddFirst(reconciliation);
+					}
+				}
+
+				await reconciliationRepository.AddAllAsync(newRecs, cancellationToken);
+
+				return RedirectToAction(@"Create");
+			}
+		}
+	}
 }

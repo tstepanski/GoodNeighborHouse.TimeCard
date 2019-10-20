@@ -2,7 +2,7 @@
 
 namespace GoodNeighborHouse.TimeCard.Web.Models
 {
-	public class Punch
+	public class Punch : IPunch
 	{
 		public Guid Id { get; set; }
 		public Guid VolunteerId { get; set; }
@@ -19,5 +19,10 @@ namespace GoodNeighborHouse.TimeCard.Web.Models
 		public string LastUpdatedBy { get; set; }
 
 		public DateTime UpdatedAt { get; set; }
+
+		public DateTime GetDate()
+		{
+			return PunchTime.Date;
+		}
 	}
 }
