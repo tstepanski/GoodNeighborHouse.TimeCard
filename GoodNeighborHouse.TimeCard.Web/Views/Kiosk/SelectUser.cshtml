@@ -1,14 +1,52 @@
 ﻿@model SelectUserModel
 
-@using (Html.BeginForm(@"SelectUser", @"Kiosk", FormMethod.Post))
-{
-    <div class="form-group">
-        <label>UserName</label>
-        @Html.TextBoxFor(model => model.UserName, new
-        {
-            @class = @"form-control"
-        })
-    </div>
-
-    <button type="submit" value="Submit" class="btn btn-md">Go</button>
+<script type="text/javascript">
+function addZero(i) {
+  if (i < 10) {
+    i = "0" + i;
+  }
+  return i;
 }
+
+    var setClock = function() {
+        var date = new Date();
+        var hours = addZero(date.getHours());
+        var minutes = addZero(date.getMinutes());
+        var seconds = addZero(date.getSeconds());
+        
+        document.getElementById("clock").innerText = hours + ":" + minutes + ":" + seconds
+    };
+    
+    setInterval(setClock, 1000);
+    setClock();
+</script>
+
+<div id="clock" style="
+    align-items: center;
+    width: 90vw;
+    font-size: 18em;">--:--:--</div>
+
+<div style="display:block;">
+    @using (Html.BeginForm(@"SelectUser", @"Kiosk", FormMethod.Post, new
+    {
+        @class = @"form-inline",
+        style = @"display:flex;justify-content:center;align-items:center;"
+    }))
+    {
+        <div class="form-group">
+            @Html.TextBoxFor(model => model.UserName, new
+            {
+                @class = @"form-control",
+                style = @"opacity:0.8;border-radius:5px;display:inline-block;width=50vw;margin-right:5px;font-size:3em;",
+                placeholder = @"Enter username"
+            })
+        </div>
+
+        <button type="submit"
+                value="Submit"
+                class="btn btn-primary"
+                style="display: inline-block;font-size: 2.5em;">
+            Login
+        </button>
+    }
+</div>
