@@ -3,16 +3,18 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GoodNeighborHouse.TimeCard.Data.Entities;
 using GoodNeighborHouse.TimeCard.Data.Repositories;
 using GoodNeighborHouse.TimeCard.Data.UnitOfWork;
 using GoodNeighborHouse.TimeCard.General;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
 using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
-using GoodNeighborHouse.TimeCard.Data.Entities;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
+	[Authorize]
 	public sealed class VolunteerController : Controller
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -43,38 +45,38 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			}
 		}
 
-        [HttpGet]
-        public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
-        {
-            var getOrganizationsTask = Task.Run(async () =>
-            {
-                using (var organizationsUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
-                {
-                    return await organizationsUnitOfWork
-                        .GetRepository<IGetRepository<Organization, Guid>>()
-                        .GetAllAsync()
-                        .ToImmutableArrayAsync(cancellationToken);
-                }
-            }, cancellationToken);
+		[HttpGet]
+		public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
+		{
+			var getOrganizationsTask = Task.Run(async () =>
+			{
+				using (var organizationsUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
+				{
+					return await organizationsUnitOfWork
+						.GetRepository<IGetRepository<Organization, Guid>>()
+						.GetAllAsync()
+						.ToImmutableArrayAsync(cancellationToken);
+				}
+			}, cancellationToken);
 
-            var getDepartmentsTask = Task.Run(async () =>
-            {
-                using (var organizationsUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
-                {
-                    return await organizationsUnitOfWork
-                        .GetRepository<IGetRepository<Department, Guid>>()
-                        .GetAllAsync()
-                        .ToImmutableArrayAsync(cancellationToken);
-                }
-            }, cancellationToken);
+			var getDepartmentsTask = Task.Run(async () =>
+			{
+				using (var organizationsUnitOfWork = _unitOfWorkFactory.CreateReadOnly())
+				{
+					return await organizationsUnitOfWork
+						.GetRepository<IGetRepository<Department, Guid>>()
+						.GetAllAsync()
+						.ToImmutableArrayAsync(cancellationToken);
+				}
+			}, cancellationToken);
 
-            await Task.WhenAll(getOrganizationsTask, getDepartmentsTask);
+			await Task.WhenAll(getOrganizationsTask, getDepartmentsTask);
 
-            var organizations = getOrganizationsTask.Result;
-            var departments = getDepartmentsTask.Result;
+			var organizations = getOrganizationsTask.Result;
+			var departments = getDepartmentsTask.Result;
 
-            return View(@"Edit", new VolunteerModel());
-        }
+			return View(@"Edit", new VolunteerModel());
+		}
 
 		[HttpPost]
 		public async Task<IActionResult> Create(VolunteerModel volunteer, CancellationToken cancellationToken = default)
@@ -103,12 +105,12 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				var repository = unitOfWork.GetRepository<IVolunteerRepository>();
 				var entity = await repository.GetAsync(id, cancellationToken);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
+				if (entity == null)
+				{
+					return NotFound();
+				}
 
-                var volunteer = _converter.Convert(entity);
+				var volunteer = _converter.Convert(entity);
 
 				return View(volunteer);
 			}
@@ -123,19 +125,19 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				var repository = unitOfWork.GetRepository<IVolunteerRepository>();
 				var entity = await repository.GetAsync(volunteer.Id, cancellationToken);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
+				if (entity == null)
+				{
+					return NotFound();
+				}
 
-                _mapper.MapTo(volunteer, entity);
+				_mapper.MapTo(volunteer, entity);
 
 				await repository.UpdateAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
 				volunteer = _converter.Convert(entity);
 
-                return View(volunteer);
+				return View(volunteer);
 			}
 		}
 	}

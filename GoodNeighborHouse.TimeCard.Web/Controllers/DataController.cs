@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 using GoodNeighborHouse.TimeCard.Data.Repositories;
 using GoodNeighborHouse.TimeCard.Data.UnitOfWork;
 using GoodNeighborHouse.TimeCard.General;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
+	[Authorize]
 	public sealed class DataController : Controller
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
