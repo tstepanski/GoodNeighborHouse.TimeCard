@@ -21,7 +21,12 @@ window.GNH.hideOnPunchInSelect = (window.GNH.hideOnPunchInSelect || function() {
 window.GNH.showQuantitySelect = (window.GNH.showQuantitySelect || function () {
     document.getElementById("punch-buttons").style.display = "none";
     document.getElementById("department-select").style.display = "none";
-    document.getElementById("quantity-select").style.display = "display:flex;justify-content:center;align-items:center;";
+
+    var quantitySelectionStyle = document.getElementById("quantity-select").style;
+
+    quantitySelectionStyle.display = "flex";
+    quantitySelectionStyle.justifyContent = "center";
+    quantitySelectionStyle.alignItems = " center";
 });
 
 window.GNH.getQuantity = (window.GNH.getQuantity || function () {
