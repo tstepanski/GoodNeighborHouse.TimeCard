@@ -11,7 +11,7 @@
             @Html.ActionLink(@"Punch in", @"PunchIn", @"Kiosk", new
             {
                 volunteerId = Model.Id,
-                departmentId = Model.Departments.First().Id
+                departmentId = Model.Departments.First().Item
             }, new
             {
                 @class = @"btn btn-md"
@@ -32,10 +32,10 @@
     @foreach (var department in Model.Departments)
     {
         // <a href="/Kiosk/Punch/{volunteerId}/{departmentId}>
-        @Html.ActionLink(department.Name, @"PunchIn", @"Kiosk", new
+        @Html.ActionLink(department.Display, @"PunchIn", @"Kiosk", new
         {
             volunteerId = Model.Id,
-            departmentId = department.Id
+            departmentId = department.Item
         }, new
         {
             @class = @"btn btn-md"
