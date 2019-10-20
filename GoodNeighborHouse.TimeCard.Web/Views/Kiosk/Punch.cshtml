@@ -5,7 +5,7 @@
     foreach (var department in Model.Departments)
     {
         // <a href="/Kiosk/Punch/{volunteerId}/{departmentId}>
-        @Html.ActionLink(department.Name, @"Punch", @"Kiosk", new
+        @Html.ActionLink(department.Name, @"PunchIn", @"Kiosk", new
         {
             volunteerId = Model.Id,
             departmentId = department.Id
@@ -15,4 +15,12 @@
         })
     }
 }
+
+@Html.ActionLink(@"Punch out", @"PunchOut", @"Kiosk", new
+{
+    volunteerId = Model.Id,
+}, new
+{
+    @class = @"btn btn-md"
+});
 
