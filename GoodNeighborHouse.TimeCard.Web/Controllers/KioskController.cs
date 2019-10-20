@@ -35,7 +35,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			return Task.FromResult(viewResult);
 		}
 
-		[HttpPost(@"User")]
+        [HttpPost(@"User")]
 		public async Task<IActionResult> SelectUser([Bind(nameof(SelectUserModel.UserName))]
 			SelectUserModel model,
 			CancellationToken cancellationToken = default)
@@ -86,8 +86,8 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				await punchRepository.AddAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
-				return Accepted();
-			}
+				return RedirectToAction(@"Index", @"Kiosk");
+            }
 		}
 
 		[HttpGet(@"PunchOut/{volunteerId}")]
@@ -118,7 +118,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				await punchRepository.AddAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
-				return Accepted();
+                return RedirectToAction(@"Index", @"Kiosk");
 			}
 		}
 	}
