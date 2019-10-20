@@ -43,6 +43,20 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
+        {
+            using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
+            {
+                var repository = unitOfWork.GetRepository<IDepartmentRepository>();
+                var entity = await Task.Run(() => new DepartmentEntity());
+
+                var department = _converter.Convert(entity);
+
+                return View(@"Edit", department);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(DepartmentModel department, CancellationToken cancellationToken = default)
         {
@@ -81,8 +95,8 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Edit([FromBody] DepartmentModel department,
+        [HttpPost]
+        public async Task<IActionResult> Edit(Guid Id, [Bind("Id,Name")] DepartmentModel department,
             CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateReadWrite())
@@ -92,7 +106,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 
                 if (entity == null)
                 {
-                    return NotFound();
+                    entity = new DepartmentEntity();
                 }
 
                 _mapper.MapTo(department, entity);
@@ -102,7 +116,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 
                 department = _converter.Convert(entity);
 
-                return View(department);
+                return RedirectToAction(@"ViewAll");
             }
         }
     }

@@ -6,22 +6,33 @@
     Layout = "_Layout";
 }
 
-<h2>Organizations</h2>
-
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var organization in Model)
-        {
+<div class="container py-3">
+    <form>
+        <table class="col-xl-12">
             <tr>
-                <td>@organization.Name</td>
-                <td>@Html.ActionLink(@"Edit", nameof(OrganizationController.Edit), new { id = organization.Id }, new { @class = @"btn btn-default" })</td>
+                <td><h2>Organizations</h2></td>
+                <td class="text-right">
+                    <input type="submit" name="new" value="New" class="btn btn-outline-success"
+                            formaction="/Organization/Create" formmethod="get" />
+                </td>
             </tr>
-        }
-    </tbody>
-</table>
+        </table>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var organization in Model)
+                {
+                    <tr>
+                        <td>@organization.Name</td>
+                        <td>@Html.ActionLink(@"Edit", nameof(OrganizationController.Edit), new { id = organization.Id }, new { @class = @"btn btn-outline-primary" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
