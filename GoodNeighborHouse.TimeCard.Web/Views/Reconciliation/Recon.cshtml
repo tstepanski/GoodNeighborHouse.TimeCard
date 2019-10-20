@@ -12,30 +12,51 @@
                 {
                     var deleted = false;
                     string text;
+                    string actionIcon;
+                    Guid punchId;
+                    string actionTargetId;
 
                     switch (punch)
                     {
                         case MissingPunch _:
                             text = @"Missing Punch";
+                            actionIcon = @"+";
+                            punchId = Guid.NewGuid();
+                            actionTargetId = $@"{punchId}-create";
                             break;
                         case Punch realPunch:
                             text = realPunch.PunchTime.ToString(@"HH:mm");
                             deleted = realPunch.IsDeleted;
+                            actionIcon = @"+";
+                            punchId = realPunch.Id;
+                            actionTargetId = $@"{punchId}-delete";
                             break;
                         default:
                             throw new ArgumentException($@"Invalid {nameof(IPunch)} type");
                     }
 
-                    <div class="punch @{
-                                          if (deleted)
-                                          {
-                                              @Html.Raw(@"deleted-punch")
-                                          }
-                                      }">
+                    <div id="@(punchId)-actual" class="punch @{
+                                                                 if (deleted)
+                                                                 {
+                                                                     @Html.Raw(@"deleted-punch")
+                                                                 }
+                                                             }">
                         @{
                             var direction = punch.IsClockIn ? @"IN" : @"Out";
                         }
 
+                        <div>
+
+                            <button type="button"
+                                    onclick="document.getElementById('@actionTargetId').style.display='block';"
+                                    style="display: @(deleted ? @"none" : @"block")">
+                                @actionIcon</button>
+                        </div>
+                        <div id="@(punchId)-delete">
+                            <button type="button" onclick="window.GNH.deletePunch('@punchId');
+                                                            document.getElementById('@(punchId)-actual').class = document.getElementById('@(punchId)-actual').class + ' deleted-punch';
+                                                            document.getElementById('@(punchId)-delete').style.display='none';">Confirm?</button>
+                        </div>
                         <span class="punch-direction">@direction</span>
                         <span class="punch-text">@text</span>
                     </div>
@@ -43,4 +64,9 @@
             </div>
         </div>
     }
+</div>
+
+<div id=""
+     style="display: none;">
+
 </div>

@@ -13,6 +13,8 @@ using OrganizationModel = GoodNeighborHouse.TimeCard.Web.Models.Organization;
 using OrganizationEntity = GoodNeighborHouse.TimeCard.Data.Entities.Organization;
 using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
 using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
+using PunchModel = GoodNeighborHouse.TimeCard.Web.Models.Punch;
+using PunchEntity = GoodNeighborHouse.TimeCard.Data.Entities.Punch;
 
 namespace GoodNeighborHouse.TimeCard.Web
 {
@@ -37,6 +39,7 @@ namespace GoodNeighborHouse.TimeCard.Web
 				.RegisterSingleton<IMapper<OrganizationModel, OrganizationEntity>, OrganizationConverter>()
 				.RegisterSingleton<IConverter<VolunteerEntity, VolunteerModel>, VolunteerConverter>()
 				.RegisterSingleton<IMapper<VolunteerModel, VolunteerEntity>, VolunteerConverter>()
+				.RegisterSingleton<IConverter<PunchEntity, PunchModel>, PunchConverter>()
 				.Complete()
 				.AddHostedService<StartupServices>();
 
