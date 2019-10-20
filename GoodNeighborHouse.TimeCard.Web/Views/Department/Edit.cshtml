@@ -1,15 +1,37 @@
 ﻿@model GoodNeighborHouse.TimeCard.Web.Models.Department
 
 @{
-    ViewBag.Title = "Edit Department";
+    var titleVerb = Model.Id == default ? "Create" : "Edit";
+    ViewBag.Title = $"{titleVerb} Department";
     Layout = "_Layout";
 }
 
-<h2>@Model.Name</h2>
+@if (Model.Name != null)
+{
+    <h2 class="py-3">@Model.Name</h2>
+}
+else
+{
+    <h2 class="py-3">Create Department</h2>
+}
 
-@Html.HiddenFor(department => department.Id)
-
-<div class="form-group">
-    <label>Name</label>
-    @Html.TextBoxFor(department => department.Name)
+<div class="container">
+    <form>
+        @Html.HiddenFor(department => department.Id)
+        <div class="form-group row">
+            @Html.LabelFor(department => department.Name, new { @class = "col-xs-3 col-form-label mr-2", @for = "txtDeptName" })
+            <div class="col-xs-9">
+                @Html.TextBoxFor(department => department.Name, new { @class = "form-control", @placeholder = "Name", @id = "txtDeptName" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-xs-3 col-xs-9">
+                <input type="submit" name="save" value="Save" class="btn btn-outline-primary"
+                       formaction="/Department/Edit" formmethod="post" />
+                <input type="submit" name="cancel" value="Cancel" class="btn btn-outline-dark"
+                       formaction="/Department/ViewAll" formmethod="get" />
+            </div>
+        </div>
+    </form>
 </div>
+
