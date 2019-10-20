@@ -15,6 +15,7 @@ using DepartmentModel = GoodNeighborHouse.TimeCard.Web.Models.Department;
 using DepartmentEntity = GoodNeighborHouse.TimeCard.Data.Entities.Department;
 using DepartmentVolunteer = GoodNeighborHouse.TimeCard.Data.Entities.DepartmentVolunteer;
 using GoodNeighborHouse.TimeCard.Web.Models;
+using System.Text.RegularExpressions;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
@@ -50,25 +51,14 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 					.Select(_volunteerConverter.Convert)
 					.ToImmutableArray();
 
-				return View(@"ViewAll", volunteers);
-			}
-		}
+                return View(@"ViewAll", volunteers);
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
         {
-            var getOrganizationsTask = Task.Run(async () =>
-            {
-                using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
-                {
-                    return (await unitOfWork
-                        .GetRepository<IOrganizationRepository>()
-                        .GetAllAsync()
-                        .ToImmutableArrayAsync(cancellationToken))
-                        .Select(_organizationConverter.Convert)
-                        .ToImmutableArray();
-                }
-            }, cancellationToken);
+            var getOrganizationsTask = GetOrganizationsTask(cancellationToken);
 
             var getDepartmentsTask = Task.Run(async () =>
             {
@@ -88,7 +78,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
             var model = new VolunteerModel
             {
                 Organizations = getOrganizationsTask.Result.ToList(),
-                Departments = getDepartmentsTask.Result.ToList()
+                Departments = getDepartmentsTask.Result.ToList(),
             };
 
             return View(@"Edit", model);
@@ -113,25 +103,23 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
                 {
                     var previousUserName = previousVolunteerWithName.Username;
                     int index;
-                    int substringLength = 0;
-                    int lastNumber = 0;
+                    var lastNumber = 0;
 
                     for(index = 0; index < previousUserName.Length; index++)
                     {
                         if (Char.IsDigit(previousUserName[index]))
                         {
-                            substringLength++;
+                            break;
                         }
                     }
 
-                    index = previousUserName.Length - substringLength - 1;
-                    int.TryParse(previousUserName.Substring(index, substringLength), out lastNumber);
+                    int.TryParse(previousUserName.Substring(index), out lastNumber);
                     lastNumber++;
                     lastPart = lastNumber.ToString();
                 }
 
                 var firstPart = firstName == null ? string.Empty : $@"{firstName}.";
-                var userName = $@"{firstPart}{lastName}{lastPart}";
+                var userName = Regex.Replace($@"{firstPart}{lastName}{lastPart}", @"\s", string.Empty);
 
                 volunteer.Username = userName;
 
@@ -142,8 +130,6 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				await repository.AddAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
-				volunteer = _volunteerConverter.Convert(entity);
-
 				return RedirectToAction(@"ViewAll");
 			}
 		}
@@ -151,24 +137,34 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit([FromRoute] Guid id, CancellationToken cancellationToken = default)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
-			{
-				var repository = unitOfWork.GetRepository<IVolunteerRepository>();
-				var entity = await repository.GetAsync(id, cancellationToken);
+            var getVolunteer = GetVolunteer(id, cancellationToken);
+            var getOrganizationsTask = GetOrganizationsTask(cancellationToken);
+            var getAllDepartments = GetDepartmentsTask(cancellationToken);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
+            await Task.WhenAll(getVolunteer, getOrganizationsTask, getAllDepartments);
 
-                var volunteer = _volunteerConverter.Convert(entity);
+            var volunteer = getVolunteer.Result;
 
-				return View(volunteer);
-			}
-		}
+            volunteer.Organizations = getOrganizationsTask.Result.ToList();
 
-		[HttpPut]
-		public async Task<IActionResult> Edit([FromBody] VolunteerModel volunteer,
+            var currentlySelectedDepartments = volunteer
+                .Departments
+                .Select(department => department.Item)
+                .ToImmutableSortedSet();
+
+            volunteer.Departments = getAllDepartments
+                .Result
+                .Select(department => currentlySelectedDepartments.Contains(department.Id)
+                    ? Selection<Guid>.CreateSelected(department.Id, department.Name)
+                    : Selection<Guid>.CreateUnselected(department.Id, department.Name))
+                .OrderBy(department => department.Display)
+                .ToList();
+
+            return View(volunteer);
+        }
+
+		[HttpPost]
+		public async Task<IActionResult> Edit([FromForm] VolunteerModel volunteer,
 			CancellationToken cancellationToken = default)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateReadWrite())
@@ -186,10 +182,60 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				await repository.UpdateAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
-				volunteer = _volunteerConverter.Convert(entity);
-
-                return View(volunteer);
+                return RedirectToAction(@"ViewAll");
 			}
 		}
-	}
+
+        #region Methods
+
+        private async Task<ImmutableArray<OrganizationModel>> GetOrganizationsTask(CancellationToken cancellationToken = default)
+        {
+            using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
+            {
+                return (await unitOfWork
+                    .GetRepository<IOrganizationRepository>()
+                    .GetAllAsync()
+                    .ToImmutableArrayAsync(cancellationToken))
+                    .Select(_organizationConverter.Convert)
+                    .ToImmutableArray();
+            }
+        }
+
+        private async Task<ImmutableArray<DepartmentModel>> GetDepartmentsTask(CancellationToken cancellationToken = default)
+        {
+            using (var unitOfWork = _unitOfWorkFactory.CreateReadWrite())
+            {
+                var repository = unitOfWork.GetRepository<IDepartmentRepository>();
+
+                return (await repository
+                    .GetAllAsync()
+                    .ToImmutableArrayAsync(cancellationToken))
+                    .Select(_departmentConverter.Convert)
+                    .ToImmutableArray();
+            }
+        }
+
+        private async Task<VolunteerModel> GetVolunteer(Guid id, CancellationToken cancellationToken = default)
+        {
+            var getVolunteer = Task.Run(async () =>
+            {
+                using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
+                {
+                    var repository = unitOfWork.GetRepository<IVolunteerRepository>();
+                    var entity = await repository.GetAsync(id, cancellationToken);
+
+                    if (entity == null)
+                    {
+                        return null;
+                    }
+
+                    return _volunteerConverter.Convert(entity);
+                }
+            });
+
+            return await getVolunteer;
+        }
+
+        #endregion
+    }
 }

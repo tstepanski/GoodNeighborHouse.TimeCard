@@ -7,31 +7,31 @@
     Layout = "_Layout";
 
     if (Model.Organizations != null) {
-            foreach (var organization in Model.Organizations)
+        foreach (var organization in Model.Organizations)
+        {
+            organizationItems.Add(new SelectListItem
             {
-                organizationItems.Add(new SelectListItem
-                {
-                    Text = organization.Name,
-                    Value = organization.Id.ToString()
-                });
-            }
+                Text = organization.Name,
+                Value = organization.Id.ToString()
+            });
+        }
     }
 }
 
-@if (Model.FirstName != null || Model.LastName != null)
+@if (Model.LastName != null)
 {
-    <h2>@Model.FirstName @Model.LastName</h2>
+<h2>@Model.FirstName @Model.LastName</h2>
 }
 else
 {
-    <h2>Create Volunteer</h2>
+<h2>Create Volunteer</h2>
 }
 
 
 @using (Html.BeginForm(titleVerb, "Volunteer", FormMethod.Post))
 {
     @Html.HiddenFor(volunteer => volunteer.Id)
-    
+
     <div class="form-group">
         <label>Last Name or Group</label><br />
         @Html.TextBoxFor(volunteer => volunteer.LastName, new {
@@ -53,17 +53,25 @@ else
         })
     </div>
 
+    @if (Model.Username != null)
+    {
+        <div class="form-group">
+            <label>User Name</label><br />
+            @Html.TextBoxFor(volunteer => volunteer.Username, null, new
+            {
+                @readonly = @"readonly",
+                @class = @"form-control"
+            })
+        </div>
+    }
+
     <div class="form-group">
         <label>
-            @Html.RadioButtonFor(volunteer => volunteer.IsGroup, false, new {
-            @class = @"form-control"
-        })
+            @Html.RadioButtonFor(volunteer => volunteer.IsGroup, false)
             Individual
         </label>
         <label>
-            @Html.RadioButtonFor(volunteer => volunteer.IsGroup, true, new {
-            @class = @"form-control"
-        })
+            @Html.RadioButtonFor(volunteer => volunteer.IsGroup, true)
             Group
         </label>
     </div>
@@ -71,27 +79,27 @@ else
     <div class="form-group">
         <label>
             @Html.CheckBoxFor(volunteer => volunteer.IsPaid, new {
-            @class = @"form-control"
-        })
+            @class = @"form-check"
+            })
             Paid Volunteer
         </label>
     </div>
 
     <div class="form-group">
-            <h5>Departments</h5>
-            @for (int i = 0; i < Model.Departments.Count; i++)
-            {
-                <label>
-                    @Html.CheckBoxFor(selection => selection.Departments[i].Selected, new {
-                        @class = @"form-control"
-                    })
-                    @Model.Departments[i].Display
-                    @Html.HiddenFor(selection => selection.Departments[i].Item)
-                </label><br />
-            }
+        <h5>Departments</h5>
+        @for(int i = 0; i < Model.Departments.Count; i++)
+        {
+            <label>
+                @Html.CheckBoxFor(selection => selection.Departments[i].Selected, new {
+                    @class = @"form-check"
+                })
+                @Model.Departments[i].Display
+                @Html.HiddenFor(selection => selection.Departments[i].Item)
+            </label><br />
+        }
     </div>
 
     <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
-    <button type="button" class="" onclick="Window.location.href = '@Url.Action(@"ViewAll", "Volunteer")';">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" onclick="window.location.href = '@Url.Action(@"ViewAll", "Volunteer")';">Cancel</button>
 }
 
