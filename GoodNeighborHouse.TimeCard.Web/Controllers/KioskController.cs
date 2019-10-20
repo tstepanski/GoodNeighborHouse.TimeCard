@@ -2,11 +2,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GoodNeighborHouse.TimeCard.Data.Entities;
 using GoodNeighborHouse.TimeCard.Data.Repositories;
 using GoodNeighborHouse.TimeCard.Data.UnitOfWork;
 using GoodNeighborHouse.TimeCard.General;
+using GoodNeighborHouse.TimeCard.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Punch = GoodNeighborHouse.TimeCard.Data.Entities.Punch;
 using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
 using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
 
@@ -24,11 +25,11 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			_volunteerConverter = volunteerConverter;
 		}
 
-		[HttpPost(@"User/{username}")]
-		public async Task<IActionResult> SelectUser([FromRoute] string username,
+		[HttpPost(@"User")]
+		public async Task<IActionResult> SelectUser([FromBody] SelectUserModel model,
 			CancellationToken cancellationToken = default)
 		{
-			username = username.Trim();
+			var username = model.UserName.Trim();
 
 			using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
 			{
@@ -72,6 +73,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				};
 
 				await punchRepository.AddAsync(entity, cancellationToken);
+				await unitOfWork.CommitAsync(cancellationToken);
 
 				return Accepted();
 			}
@@ -103,6 +105,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				};
 
 				await punchRepository.AddAsync(entity, cancellationToken);
+				await unitOfWork.CommitAsync(cancellationToken);
 
 				return Accepted();
 			}
