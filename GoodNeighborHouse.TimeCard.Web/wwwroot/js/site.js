@@ -1,9 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-window.GNH = (window.GNH || {});
+﻿window.GNH = (window.GNH || {});
 
 window.GNH.increaseValue = (window.GNH.increaseValue || function () {
     var value = parseInt(document.getElementById('number').value);
@@ -24,9 +19,9 @@ window.GNH.hideOnPunchInSelect = (window.GNH.hideOnPunchInSelect || function() {
 });
 
 window.GNH.showQuantitySelect = (window.GNH.showQuantitySelect || function () {
-    document.getElementById("quantity-select").style.display = "none";
+    document.getElementById("punch-buttons").style.display = "none";
     document.getElementById("department-select").style.display = "none";
-    document.getElementById("quantity-select").style.display = "block";
+    document.getElementById("quantity-select").style.display = "display:flex;justify-content:center;align-items:center;";
 });
 
 window.GNH.getQuantity = (window.GNH.getQuantity || function () {

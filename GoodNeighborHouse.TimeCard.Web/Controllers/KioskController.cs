@@ -35,7 +35,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			return Task.FromResult(viewResult);
 		}
 
-        [HttpPost(@"User")]
+		[HttpPost(@"User")]
 		public async Task<IActionResult> SelectUser([Bind(nameof(SelectUserModel.UserName))]
 			SelectUserModel model,
 			CancellationToken cancellationToken = default)
@@ -64,7 +64,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 
 				quantity ??= 1;
 
-				if (volunteer.IsGroup && quantity > 1)
+				if (!volunteer.IsGroup && quantity > 1)
 				{
 					throw new ArgumentException(@"Non-group volunteers may not specify a quantity of greater than 1");
 				}
@@ -87,7 +87,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				await unitOfWork.CommitAsync(cancellationToken);
 
 				return RedirectToAction(@"Index", @"Kiosk");
-            }
+			}
 		}
 
 		[HttpGet(@"PunchOut/{volunteerId}")]
@@ -118,7 +118,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				await punchRepository.AddAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);
 
-                return RedirectToAction(@"Index", @"Kiosk");
+				return RedirectToAction(@"Index", @"Kiosk");
 			}
 		}
 	}
