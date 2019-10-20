@@ -1,8 +1,42 @@
 ﻿@model Volunteer
 
-@if (Model.Departments.Count > 1)
-{
-    foreach (var department in Model.Departments)
+<script type="text/javascript">
+var hideOnPunchInSelect = function() {
+    $("punch-buttons").hide();
+    $("department-select").show();
+};
+</script>
+
+<div id="punch-buttons">
+    @if (Model.Departments.Count > 1)
+    {
+        <div onclick="hideOnPunchInSelect();">PUNCH IN</div>
+    }
+    else
+    {
+        <div>
+            @Html.ActionLink(@"Punch in", @"PunchIn", @"Kiosk", new
+            {
+                volunteerId = Model.Id,
+                departmentId = Model.Departments.First().Id
+            }, new
+            {
+                @class = @"btn btn-md"
+            })<
+        </div>
+    }
+    <div>
+        @Html.ActionLink(@"Punch out", @"PunchOut", @"Kiosk", new
+        {
+            volunteerId = Model.Id,
+        }, new
+        {
+            @class = @"btn btn-md"
+        })</div>
+</div>
+
+<div id="department-select" style="display: none;">
+    @foreach (var department in Model.Departments)
     {
         // <a href="/Kiosk/Punch/{volunteerId}/{departmentId}>
         @Html.ActionLink(department.Name, @"PunchIn", @"Kiosk", new
@@ -14,13 +48,4 @@
             @class = @"btn btn-md"
         })
     }
-}
-
-@Html.ActionLink(@"Punch out", @"PunchOut", @"Kiosk", new
-{
-    volunteerId = Model.Id,
-}, new
-{
-    @class = @"btn btn-md"
-});
-
+</div>
