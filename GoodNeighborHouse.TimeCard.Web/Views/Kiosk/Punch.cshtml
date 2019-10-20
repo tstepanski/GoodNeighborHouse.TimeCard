@@ -1,0 +1,90 @@
+﻿@model Volunteer
+
+<div id="punch-buttons">
+    @if (Model.Departments.Count > 1)
+    {
+        <div onclick="window.GNH.hideOnPunchInSelect();">PUNCH IN</div>
+    }
+    else
+    {
+        <div>
+            @Html.ActionLink(@"Punch in", @"PunchIn", @"Kiosk", new
+            {
+                volunteerId = Model.Id,
+                departmentId = Model.Departments.First().Id
+            }, new
+            {
+                @class = @"btn btn-md"
+            })
+        </div>
+    }
+    <div>
+        @Html.ActionLink(@"Punch out", @"PunchOut", @"Kiosk", new
+        {
+            volunteerId = Model.Id,
+        }, new
+        {
+            @class = @"btn btn-md"
+        })</div>
+</div>
+
+<div id="department-select" style="display: none;">
+    @foreach (var department in Model.Departments)
+    {
+        // <a href="/Kiosk/Punch/{volunteerId}/{departmentId}>
+        @Html.ActionLink(department.Name, @"PunchIn", @"Kiosk", new
+        {
+            volunteerId = Model.Id,
+            departmentId = department.Id
+        }, new
+        {
+            @class = @"btn btn-md"
+        })
+    }
+    }
+</div>
+
+<style>
+#btn__in {
+    background-color:#1adb37;
+    opacity:0.7;
+    width:30%;
+    height:30%;
+    color:white;
+    display:inline-block;
+    font-size:8em;
+    font-family:'arial', sans-serif;
+    border-radius:15px;
+    float:left;
+    margin-left:18%;
+}
+#btn__out {
+    background-color:red;
+    opacity:0.7;
+    width:30%;
+    height:30%;
+    color:white;
+    display:inline-block;
+    font-size:8em;
+    font-family:'arial', sans-serif;
+    border-radius:15px;
+    float:right;
+    margin-right:18%;
+}
+
+.wrapper {
+    text-align:center;
+}
+</style>
+
+<div class="wrapper">
+    <div id="btn__in">
+        <p>IN</p>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div id="btn__out">
+        <p>OUT</p>
+    </div>
+</div>

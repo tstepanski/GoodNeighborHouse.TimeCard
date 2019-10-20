@@ -1,13 +1,9 @@
 using GoodNeighborHouse.TimeCard.Data;
 using GoodNeighborHouse.TimeCard.General;
 using GoodNeighborHouse.TimeCard.Identity.Data;
-using GoodNeighborHouse.TimeCard.Web.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using GoodNeighborHouse.TimeCard.Web.Converters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +16,7 @@ using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
 
 namespace GoodNeighborHouse.TimeCard.Web
 {
-    public class Startup
+	public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -31,36 +27,21 @@ namespace GoodNeighborHouse.TimeCard.Web
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-            services = RegistrationContext
-                .New(services, Configuration)
-                .Register<IdentityDataRegistrar>()
-                .Register<GNHDataRegistrar>()
-                .RegisterSingleton<IConverter<DepartmentEntity, DepartmentModel>, DepartmentConverter>()
-                .RegisterSingleton<IMapper<DepartmentModel, DepartmentEntity>, DepartmentConverter>()
-                .RegisterSingleton<IConverter<OrganizationEntity, OrganizationModel>, OrganizationConverter>()
-                .RegisterSingleton<IMapper<OrganizationModel, OrganizationEntity>, OrganizationConverter>()
-                .RegisterSingleton<IConverter<VolunteerEntity, VolunteerModel>, VolunteerConverter>()
-                .RegisterSingleton<IMapper<VolunteerModel, VolunteerEntity>, VolunteerConverter>()
-                .Complete()
-                .Configure<LdapConfig>(Configuration.GetSection("ldap"))
-                .AddScoped<IAuthenticationService, LdapAuthenticationService>()
-                .AddHostedService<StartupServices>();
-
-            var isAdminUserPolicy = new AuthorizationPolicyBuilder()
-                .RequireRole("Admin")
-                .Build();
-
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new ApplyPolicyOrAuthorizeFilter(isAdminUserPolicy));
-            });
+			services = RegistrationContext
+				.New(services, Configuration)
+				.Register<IdentityDataRegistrar>()
+				.Register<GNHDataRegistrar>()
+				.RegisterSingleton<IConverter<DepartmentEntity, DepartmentModel>, DepartmentConverter>()
+				.RegisterSingleton<IMapper<DepartmentModel, DepartmentEntity>, DepartmentConverter>()
+				.RegisterSingleton<IConverter<OrganizationEntity, OrganizationModel>, OrganizationConverter>()
+				.RegisterSingleton<IMapper<OrganizationModel, OrganizationEntity>, OrganizationConverter>()
+				.RegisterSingleton<IConverter<VolunteerEntity, VolunteerModel>, VolunteerConverter>()
+				.RegisterSingleton<IMapper<VolunteerModel, VolunteerEntity>, VolunteerConverter>()
+				.Complete()
+				.AddHostedService<StartupServices>();
 
 
-            services.AddControllersWithViews();
-
-            services
-                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(o => o.LoginPath = new PathString("/login/login"));
+			services.AddControllersWithViews();
 
 			services.AddRazorPages();
 		}
@@ -73,9 +54,9 @@ namespace GoodNeighborHouse.TimeCard.Web
 						.UseExceptionHandler("/Home/Error")
 						.UseHsts())
 				.UseHttpsRedirection()
-                .UseStaticFiles()
+				.UseStaticFiles()
 				.UseRouting()
-                .UseAuthentication()
+				.UseAuthentication()
 				.UseAuthorization()
 				.UseEndpoints(endpoints =>
 				{

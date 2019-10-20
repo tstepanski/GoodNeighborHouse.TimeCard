@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     [DbContext(typeof(GNHContext))]
-    [Migration("20191019194201_UpdateVolunteerModel")]
-    partial class UpdateVolunteerModel
+    [Migration("20191020032534_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,6 +55,31 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                             Id = new Guid("b6240b56-6ff2-e911-9ae8-d0c637a95ae1"),
                             Name = "Medical"
                         });
+                });
+
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.DepartmentVolunteer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id")
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnName("DepartmentId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.Property<Guid>("VolunteerId")
+                        .HasColumnName("VolunteerId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("VolunteerId");
+
+                    b.ToTable("DepartmentVolunteers");
                 });
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Organization", b =>
@@ -151,11 +176,11 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 
                     b.Property<DateTime>("ApprovedOn")
                         .HasColumnName("ApprovedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("DATETIME");
 
                     b.Property<long>("Difference")
                         .HasColumnName("Difference")
-                        .HasColumnType("bigint");
+                        .HasColumnType("BIGINT");
 
                     b.Property<Guid>("PunchInId")
                         .HasColumnName("In")
@@ -171,7 +196,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 
                     b.HasIndex("PunchOutId");
 
-                    b.ToTable("Recon");
+                    b.ToTable("Reconciliations");
                 });
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", b =>
@@ -182,12 +207,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnType("UNIQUEIDENTIFIER")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnName("DOB")
-                        .HasColumnType("datetime");
-
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnName("FirstName")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
@@ -206,6 +226,10 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
+                    b.Property<Guid?>("OrganizationId")
+                        .HasColumnName("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnName("Username")
@@ -217,18 +241,33 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                     b.ToTable("Volunteers");
                 });
 
+            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.DepartmentVolunteer", b =>
+                {
+                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Department", "Department")
+                        .WithMany("DepartmentVolunteers")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", "Volunteer")
+                        .WithMany("DepartmentVolunteers")
+                        .HasForeignKey("VolunteerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Punch", b =>
                 {
                     b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", "Volunteer")
                         .WithMany()
                         .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -237,13 +276,13 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                     b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Punch", "PunchIn")
                         .WithMany()
                         .HasForeignKey("PunchInId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Punch", "PunchOut")
                         .WithMany()
                         .HasForeignKey("PunchOutId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
