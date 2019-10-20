@@ -27,9 +27,9 @@ else
         <div class="form-group row">
             <div class="offset-xs-3 col-xs-9">
                 <input type="submit" name="save" value="Save" class="btn btn-outline-primary"
-                       formaction="/Organization/Edit" formmethod="post" />
+                       formaction="@Url.Action("Edit", "Organization")" formmethod="post" />
                 <input type="submit" name="cancel" value="Cancel" class="btn btn-outline-dark"
-                       formaction="/Organization/ViewAll" formmethod="get" />
+                       formaction="@Url.Action("ViewAll", "Organization")" formmethod="get" />
             </div>
         </div>
     </form>
