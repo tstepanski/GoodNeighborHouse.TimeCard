@@ -73,7 +73,7 @@ window.GNH.punch = (window.GNH.punch || function() {
                })';
       
     var quantity = "@(Model.IsGroup)".toLowerCase() === "true".toLowerCase() ? window.GNH.getQuantity() : 1;
-    var departmentId = window.GNH.departmentId || "@(Model.Departments.First().Id)";
+    var departmentId = window.GNH.departmentId || "@(Model.Departments.First().Item)";
     
     url = url.replace(/{{{DEPARTMENTID/, departmentId);
     url = url.replace(/{{{QUANTITY}}}/, quantity.toString());
@@ -127,8 +127,8 @@ window.GNH.punch = (window.GNH.punch || function() {
             <li>
                 <button type="button"
                         class="btn bg-white department-button"
-                        onclick="window.GNH.departmentId = '@(department.Id)'; @onDepartmentClick">
-                    @department.Name
+                        onclick="window.GNH.departmentId = '@(department.Item)'; @onDepartmentClick">
+                    @department.Display
                 </button>
             </li>
         }
