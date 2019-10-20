@@ -39,7 +39,8 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 						.GetAllAsync()
 						.ToImmutableArrayAsync(cancellationToken))
 					.Select(_converter.Convert)
-					.ToImmutableArray();
+					.OrderBy(x => x.Name.ToLowerInvariant())
+                    .ToImmutableArray();
 
 				return View(organizations);
 			}
@@ -75,7 +76,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 
 				organization = _converter.Convert(entity);
 
-				return View(@"Edit", organization);
+				return RedirectToAction(@"ViewAll");
 			}
 		}
 
