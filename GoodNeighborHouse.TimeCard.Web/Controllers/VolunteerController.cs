@@ -97,9 +97,39 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 		public async Task<IActionResult> Create(VolunteerModel volunteer, CancellationToken cancellationToken = default)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateReadWrite())
-			{
+			{  
 				var repository = unitOfWork.GetRepository<IVolunteerRepository>();
-				var entity = new VolunteerEntity();
+
+                var firstName = volunteer.FirstName?.ToLower();
+                var lastName = volunteer.LastName.ToLower();
+
+                var previousVolunteerWithName = 
+                    await repository.GetNewestVolunteerByName(volunteer.FirstName, volunteer.LastName, cancellationToken);
+
+                string lastPart = string.Empty;
+
+                if (previousVolunteerWithName != null)
+                {
+                    var previousUserName = previousVolunteerWithName.Username;
+                    int index;
+
+                    for(index = 0; index < previousUserName.Length; index++)
+                    {
+                        if (Char.IsDigit(previousUserName[index]))
+                        {
+                            break;
+                        }
+                    }
+
+                    lastPart = (int.Parse(previousUserName.Substring(index)) + 1).ToString();
+                }
+
+                var firstPart = firstName == null ? string.Empty : $@"{firstName}.";
+                var userName = $@"{firstPart}{lastName}{lastPart}";
+
+                volunteer.Username = userName;
+
+                var entity = new VolunteerEntity();
 
 				_mapper.MapTo(volunteer, entity);
 

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using GoodNeighborHouse.TimeCard.Data.Context;
 using GoodNeighborHouse.TimeCard.Data.Entities;
 using GoodNeighborHouse.TimeCard.Data.General;
+using Microsoft.EntityFrameworkCore;
 
 namespace GoodNeighborHouse.TimeCard.Data.Repositories
 {
@@ -12,5 +16,16 @@ namespace GoodNeighborHouse.TimeCard.Data.Repositories
 		}
 
 		protected override IDatabaseSet<Volunteer> DbSet => Context.Volunteers;
-	}
+
+        public Task<Volunteer> GetNewestVolunteerByName(string firstName, string lastName,
+            CancellationToken cancellationToken = default)
+        {
+            return DbSet
+                .Where(volunteer => volunteer.LastName.ToLower() == lastName.ToLower() &&
+                                    (volunteer.FirstName == null == (firstName == null)) &&
+                                    (firstName == null || volunteer.FirstName.ToLower() == firstName.ToLower()))
+                .OrderByDescending(volunteer => volunteer.Id)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+    }
 }

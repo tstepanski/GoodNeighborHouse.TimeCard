@@ -17,7 +17,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Converters
 				LastName = entity.LastName,
                 IsPaid = entity.IsPaid,
                 IsGroup = entity.IsGroup,
-                OrganizationId = entity.OrganizationId
+                SelectedOrganizationId = entity.OrganizationId
 			};
 		}
 
@@ -28,7 +28,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Converters
 			entity.Username = businessObject.Username;
             entity.IsPaid = businessObject.IsPaid;
             entity.IsGroup = businessObject.IsGroup;
-            entity.OrganizationId = businessObject.OrganizationId;
+            entity.OrganizationId = businessObject.SelectedOrganizationId;
 		}
 	}
 }
