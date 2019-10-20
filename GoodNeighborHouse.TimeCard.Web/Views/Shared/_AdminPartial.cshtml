@@ -10,12 +10,12 @@
                     Admin
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li class="dropdown-item">@Html.ActionLink("Reconciliation", "ViewAll", "Volunteer")</li>
-                    <li class="dropdown-item">@Html.ActionLink("Data Export", "ViewAll", "Volunteer")</li>
+                    <li>@Html.ActionLink("Reconciliation", "ViewAll", "Volunteer", null, new { @class="dropdown-item btn btn-link" })</li>
+                    <li>@Html.ActionLink("Data Export", "ViewAll", "Volunteer", null, new { @class="dropdown-item btn btn-link" })</li>
                     <li class="dropdown-divider"></li>
-                    <li class="dropdown-item">@Html.ActionLink("Departments", "ViewAll", "Department")</li>
-                    <li class="dropdown-item">@Html.ActionLink("Orgnizations", "ViewAll", "Organization")</li>
-                    <li class="dropdown-item">@Html.ActionLink("Volunteers", "ViewAll", "Volunteer")</li>
+                    <li>@Html.ActionLink("Departments", "ViewAll", "Department", null, new { @class="dropdown-item btn btn-link" })</li>
+                    <li>@Html.ActionLink("Orgnizations", "ViewAll", "Organization", null, new { @class="dropdown-item btn btn-link" })</li>
+                    <li>@Html.ActionLink("Volunteers", "ViewAll", "Volunteer", null, new { @class="dropdown-item btn btn-link" })</li>
                 </ul>
             </li>
             <li class="nav-item">
