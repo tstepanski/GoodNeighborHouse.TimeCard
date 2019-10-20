@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+    <ul class="navbar-nav">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Admin
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li class="dropdown-item">@Html.ActionLink("Reconciliation", "ViewAll", "Volunteer")</li>
+                    <li class="dropdown-item">@Html.ActionLink("Data Export", "ViewAll", "Volunteer")</li>
+                    <li class="dropdown-divider"></li>
+                    <li class="dropdown-item">@Html.ActionLink("Departments", "ViewAll", "Department")</li>
+                    <li class="dropdown-item">@Html.ActionLink("Orgnizations", "ViewAll", "Organization")</li>
+                    <li class="dropdown-item">@Html.ActionLink("Volunteers", "ViewAll", "Volunteer")</li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Kiosk" asp-page="/Kiosk" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
+                    <button type="submit" class="nav-link btn btn-link">Kiosk</button>
+                </form>
+            </li>
+        }
+    </ul>
