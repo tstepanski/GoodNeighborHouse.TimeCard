@@ -3,9 +3,11 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GoodNeighborHouse.TimeCard.Data.Entities;
 using GoodNeighborHouse.TimeCard.Data.Repositories;
 using GoodNeighborHouse.TimeCard.Data.UnitOfWork;
 using GoodNeighborHouse.TimeCard.General;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
 using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
@@ -19,6 +21,7 @@ using System.Text.RegularExpressions;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
 {
+	[Authorize]
 	public sealed class VolunteerController : Controller
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -73,7 +76,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
                 }
             }, cancellationToken);
 
-            await Task.WhenAll(getOrganizationsTask, getDepartmentsTask);
+			await Task.WhenAll(getOrganizationsTask, getDepartmentsTask);
 
             var model = new VolunteerModel
             {
@@ -172,12 +175,12 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 				var repository = unitOfWork.GetRepository<IVolunteerRepository>();
 				var entity = await repository.GetAsync(volunteer.Id, cancellationToken);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
+				if (entity == null)
+				{
+					return NotFound();
+				}
 
-                _mapper.MapTo(volunteer, entity);
+				_mapper.MapTo(volunteer, entity);
 
 				await repository.UpdateAsync(entity, cancellationToken);
 				await unitOfWork.CommitAsync(cancellationToken);

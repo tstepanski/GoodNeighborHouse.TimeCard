@@ -1,0 +1,14 @@
+﻿@model SelectUserModel
+
+@using (Html.BeginForm(@"SelectUser", @"Kiosk", FormMethod.Post))
+{
+    <div class="form-group">
+        <label>UserName</label>
+        @Html.TextBoxFor(model => model.UserName, new
+        {
+            @class = @"form-control"
+        })
+    </div>
+
+    <button type="submit" value="Submit" class="btn btn-md">Go</button>
+}

@@ -1,9 +1,9 @@
-﻿using GoodNeighborHouse.TimeCard.General;
+﻿using System.Linq;
+using GoodNeighborHouse.TimeCard.General;
 using VolunteerModel = GoodNeighborHouse.TimeCard.Web.Models.Volunteer;
 using VolunteerEntity = GoodNeighborHouse.TimeCard.Data.Entities.Volunteer;
 using DepartmentModel = GoodNeighborHouse.TimeCard.Web.Models.Department;
 using DepartmentEntity = GoodNeighborHouse.TimeCard.Data.Entities.Department;
-using System.Linq;
 using System.Collections.Generic;
 using GoodNeighborHouse.TimeCard.Web.Models;
 using System;
