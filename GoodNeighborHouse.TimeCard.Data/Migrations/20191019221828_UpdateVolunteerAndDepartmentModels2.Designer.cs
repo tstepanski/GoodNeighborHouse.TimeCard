@@ -4,14 +4,16 @@ using GoodNeighborHouse.TimeCard.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     [DbContext(typeof(GNHContext))]
-    partial class GNHContextModelSnapshot : ModelSnapshot
+    [Migration("20191019221828_UpdateVolunteerAndDepartmentModels2")]
+    partial class UpdateVolunteerAndDepartmentModels2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,11 +173,11 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 
                     b.Property<DateTime>("ApprovedOn")
                         .HasColumnName("ApprovedOn")
-                        .HasColumnType("DATETIME");
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("Difference")
                         .HasColumnName("Difference")
-                        .HasColumnType("BIGINT");
+                        .HasColumnType("bigint");
 
                     b.Property<Guid>("PunchInId")
                         .HasColumnName("In")
@@ -191,7 +193,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 
                     b.HasIndex("PunchOutId");
 
-                    b.ToTable("Reconciliations");
+                    b.ToTable("Recon");
                 });
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", b =>

@@ -4,14 +4,16 @@ using GoodNeighborHouse.TimeCard.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     [DbContext(typeof(GNHContext))]
-    partial class GNHContextModelSnapshot : ModelSnapshot
+    [Migration("20191019220611_UpdateVolunteerAndDepartmentModels")]
+    partial class UpdateVolunteerAndDepartmentModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,11 +60,9 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.DepartmentVolunteer", b =>
                 {
                     b.Property<Guid>("DepartmentId")
-                        .HasColumnName("DepartmentId")
                         .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<Guid>("VolunteerId")
-                        .HasColumnName("VolunteerId")
                         .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<Guid>("Id")
@@ -171,11 +171,11 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 
                     b.Property<DateTime>("ApprovedOn")
                         .HasColumnName("ApprovedOn")
-                        .HasColumnType("DATETIME");
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("Difference")
                         .HasColumnName("Difference")
-                        .HasColumnType("BIGINT");
+                        .HasColumnType("bigint");
 
                     b.Property<Guid>("PunchInId")
                         .HasColumnName("In")
@@ -191,7 +191,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
 
                     b.HasIndex("PunchOutId");
 
-                    b.ToTable("Reconciliations");
+                    b.ToTable("Recon");
                 });
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", b =>

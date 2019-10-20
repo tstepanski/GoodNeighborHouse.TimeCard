@@ -4,14 +4,16 @@ using GoodNeighborHouse.TimeCard.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GoodNeighborHouse.TimeCard.Data.Migrations
 {
     [DbContext(typeof(GNHContext))]
-    partial class GNHContextModelSnapshot : ModelSnapshot
+    [Migration("20191019224231_Reconciliation")]
+    partial class Reconciliation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,28 +55,6 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                             Id = new Guid("b6240b56-6ff2-e911-9ae8-d0c637a95ae1"),
                             Name = "Medical"
                         });
-                });
-
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.DepartmentVolunteer", b =>
-                {
-                    b.Property<Guid>("DepartmentId")
-                        .HasColumnName("DepartmentId")
-                        .HasColumnType("UNIQUEIDENTIFIER");
-
-                    b.Property<Guid>("VolunteerId")
-                        .HasColumnName("VolunteerId")
-                        .HasColumnType("UNIQUEIDENTIFIER");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnName("Id")
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.HasKey("DepartmentId", "VolunteerId");
-
-                    b.HasIndex("VolunteerId");
-
-                    b.ToTable("DepartmentVolunteers");
                 });
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Organization", b =>
@@ -202,7 +182,12 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnType("UNIQUEIDENTIFIER")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnName("DOB")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnName("FirstName")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
@@ -221,10 +206,6 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnName("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnName("Username")
@@ -234,21 +215,6 @@ namespace GoodNeighborHouse.TimeCard.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Volunteers");
-                });
-
-            modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.DepartmentVolunteer", b =>
-                {
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Department", "Department")
-                        .WithMany("DepartmentVolunteers")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GoodNeighborHouse.TimeCard.Data.Entities.Volunteer", "Volunteer")
-                        .WithMany("DepartmentVolunteers")
-                        .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("GoodNeighborHouse.TimeCard.Data.Entities.Punch", b =>

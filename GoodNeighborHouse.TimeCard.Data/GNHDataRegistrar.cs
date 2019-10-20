@@ -16,9 +16,10 @@ namespace GoodNeighborHouse.TimeCard.Data
 			registrationContext
 				.RegisterSingleton<IGNHContextFactory, GNHContextFactory>()
 				.RegisterSingleton<IRepositoryFactory, DepartmentRepositoryFactory>()
-                .RegisterSingleton<IRepositoryFactory, OrganizationRepositoryFactory>()
-                .RegisterSingleton<IRepositoryFactory, VolunteerRepositoryFactory>()
-                .RegisterSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
+				.RegisterSingleton<IRepositoryFactory, OrganizationRepositoryFactory>()
+				.RegisterSingleton<IRepositoryFactory, VolunteerRepositoryFactory>()
+				.RegisterSingleton<IRepositoryFactory, ReportingRepositoryFactory>()
+				.RegisterSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>()
 				.RegisterSingleton<IStartupComponent, MigrationStartupComponent>()
 				.RegisterSingleton<IDatabaseOptions, DatabaseOptions>(() =>
 				{

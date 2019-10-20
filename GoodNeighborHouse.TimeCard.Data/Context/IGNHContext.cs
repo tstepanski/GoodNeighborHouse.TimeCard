@@ -14,7 +14,8 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 		IDatabaseSet<Organization> Organizations { get; }
 		IDatabaseSet<Punch> Punches { get; }
         IDatabaseSet<Reconciliation> Reconciliations { get; }
-		void SaveChanges();
+        IDatabaseSet<DepartmentVolunteer> DepartmentVolunteers { get; }
+        void SaveChanges();
 		Task SaveChangesAsync(CancellationToken cancellationToken = default);
 		Task CreateDatabaseIfNeededAsync(CancellationToken cancellationToken = default);
 		Task GetIfCanConnectAsync(CancellationToken cancellationToken = default);
