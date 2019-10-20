@@ -10,11 +10,15 @@ namespace GoodNeighborHouse.TimeCard.Data.Entities
         [Required]
         [Column("DepartmentId")]
         public Guid DepartmentId { get; set; }
+
+        [ForeignKey(nameof(DepartmentId))]
         public virtual Department Department { get; set; }
 
         [Required]
         [Column("VolunteerId")]
         public Guid VolunteerId { get; set; }
+
+        [ForeignKey(nameof(VolunteerId))]
         public virtual Volunteer Volunteer { get; set; }
     }
 }

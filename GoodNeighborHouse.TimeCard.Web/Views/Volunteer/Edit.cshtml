@@ -6,13 +6,15 @@
     ViewBag.Title = $"{titleVerb} Volunteer";
     Layout = "_Layout";
 
-    foreach (var organization in Model.Organizations)
-    {
-        organizationItems.Add(new SelectListItem
-        {
-            Text = organization.Name,
-            Value = organization.Id.ToString()
-        });
+    if (Model.Organizations != null) {
+            foreach (var organization in Model.Organizations)
+            {
+                organizationItems.Add(new SelectListItem
+                {
+                    Text = organization.Name,
+                    Value = organization.Id.ToString()
+                });
+            }
     }
 }
 
@@ -31,17 +33,19 @@ else
     @Html.HiddenFor(volunteer => volunteer.Id)
     
     <div class="form-group">
-        <label>Last Name or Group</label>
-        @Html.TextBoxFor(volunteer => volunteer.LastName)
+        <label>Last Name or Group</label><br />
+        @Html.TextBoxFor(volunteer => volunteer.LastName, new {
+            @class = @"form-control"
+        })
     </div>
 
     <div class="form-group">
-        <label>First Name</label>
+        <label>First Name</label><br />
         @Html.TextBoxFor(volunteer => volunteer.FirstName)
     </div>
 
     <div class="form-group">
-        <label>Organization (optional)</label>
+        <label>Organization (optional)</label><br />
         @Html.DropDownListFor(volunteer => volunteer.SelectedOrganizationId, organizationItems, "Select an Organization", Model.SelectedOrganizationId)
     </div>
 
@@ -64,16 +68,17 @@ else
     </div>
 
     <div class="form-group">
-        <h4>Departments</h4>
-        @for(int i = 0; i < Model.Departments.Count; i++)
-        {
-            <label>
-                @Html.CheckBoxFor(volunteer => volunteer.Departments[i].Selected)
-                @Model.Departments[i].Display
-            </label>
-        }
+            <h5>Departments</h5>
+            @for (int i = 0; i < Model.Departments.Count; i++)
+            {
+                <label>
+                    @Html.CheckBoxFor(selection => selection.Departments[i].Selected)
+                    @Model.Departments[i].Display
+                    @Html.HiddenFor(selection => selection.Departments[i].Item)
+                </label><br />
+            }
     </div>
 
-    <button type="submit" />
+    <button type="submit" value="Submit" class="btn btn-primary" />
 }
 

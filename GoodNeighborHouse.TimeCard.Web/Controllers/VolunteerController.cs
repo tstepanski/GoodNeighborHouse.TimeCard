@@ -13,6 +13,7 @@ using OrganizationModel = GoodNeighborHouse.TimeCard.Web.Models.Organization;
 using OrganizationEntity = GoodNeighborHouse.TimeCard.Data.Entities.Organization;
 using DepartmentModel = GoodNeighborHouse.TimeCard.Web.Models.Department;
 using DepartmentEntity = GoodNeighborHouse.TimeCard.Data.Entities.Department;
+using DepartmentVolunteer = GoodNeighborHouse.TimeCard.Data.Entities.DepartmentVolunteer;
 using GoodNeighborHouse.TimeCard.Web.Models;
 
 namespace GoodNeighborHouse.TimeCard.Web.Controllers
@@ -112,16 +113,21 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
                 {
                     var previousUserName = previousVolunteerWithName.Username;
                     int index;
+                    int substringLength = 0;
+                    int lastNumber = 0;
 
                     for(index = 0; index < previousUserName.Length; index++)
                     {
                         if (Char.IsDigit(previousUserName[index]))
                         {
-                            break;
+                            substringLength++;
                         }
                     }
 
-                    lastPart = (int.Parse(previousUserName.Substring(index)) + 1).ToString();
+                    index = previousUserName.Length - substringLength - 1;
+                    int.TryParse(previousUserName.Substring(index, substringLength), out lastNumber);
+                    lastNumber++;
+                    lastPart = lastNumber.ToString();
                 }
 
                 var firstPart = firstName == null ? string.Empty : $@"{firstName}.";
@@ -138,7 +144,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 
 				volunteer = _volunteerConverter.Convert(entity);
 
-				return View(@"Edit", volunteer);
+				return RedirectToAction(@"ViewAll");
 			}
 		}
 
