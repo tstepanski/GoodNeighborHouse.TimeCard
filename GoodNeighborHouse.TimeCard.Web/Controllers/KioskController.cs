@@ -27,8 +27,17 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			_volunteerConverter = volunteerConverter;
 		}
 
+		[HttpGet]
+		public Task<IActionResult> Index(CancellationToken cancellationToken = default)
+		{
+			var viewResult = (IActionResult) View(@"SelectUser", new SelectUserModel());
+
+			return Task.FromResult(viewResult);
+		}
+
 		[HttpPost(@"User")]
-		public async Task<IActionResult> SelectUser([FromBody] SelectUserModel model,
+		public async Task<IActionResult> SelectUser([Bind(nameof(SelectUserModel.UserName))]
+			SelectUserModel model,
 			CancellationToken cancellationToken = default)
 		{
 			var username = model.UserName.Trim();
