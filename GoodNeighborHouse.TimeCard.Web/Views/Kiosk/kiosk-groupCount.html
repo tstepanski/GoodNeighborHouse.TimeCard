@@ -1,0 +1,99 @@
+<!doctype HTML>
+
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/evil-icons@1.9.0/assets/evil-icons.min.css">
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .window {
+            font-family:'arial',sans-serif;
+            background-color:whitesmoke;
+            opacity:0.8;
+            text-align:center;
+            border-radius:15px;
+            margin:2em;
+            padding:15px;
+        }
+        
+        .btn {
+            margin:15px;
+            width:30%;
+            border: 1px solid #0363cc;
+            color:#0363cc;
+            font-size:2em;
+        }
+        
+        .btn-primary {
+            color:white;
+        }
+        
+        .icon {
+            fill:#0363cc;
+        }
+        
+        body {
+            background-color:black;
+        }
+        
+        #departmentList {
+            color:blue;
+            list-style:none;
+        }
+        
+        form {
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+form #decrease {
+  border-radius: 8px 0 0 8px;
+  float:left;
+        }
+form #increase {
+  border-radius: 0 8px 8px 0;
+}
+
+input#number {
+  text-align: center;
+  border: 1px solid #0363cc;
+    margin-top:15px;
+  width: 40px;
+  height: 62px;
+}
+
+    </style>
+</head>   
+    <body>
+   <div class="window">
+        <div data-icon="ei-question" data-size="l"></div>
+        <h3>How many volunteers are in your group?</h3>
+  
+       <form>
+            <div class="btn bg-white" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
+            <input type="number" id="number" value="1" />
+            <div class="btn bg-white" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
+       </form>
+       <button type="submit" class="btn btn-primary border-0">Enter</button>
+    
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/evil-icons@1.9.0/assets/evil-icons.min.js"></script>
+        
+        <script type="application/javascript">
+            function increaseValue() {
+                var value = parseInt(document.getElementById('number').value);
+                value++;
+                document.getElementById('number').value = value;
+            }
+            
+            function decreaseValue() {
+                var value = parseInt(document.getElementById('number').value);
+                value < 2 ? value = 2 : '';
+                value--;
+                document.getElementById('number').value = value;
+            }
+        </script>
+</body>
+</html>
