@@ -1,49 +1,5 @@
 ﻿@model Volunteer
-
-<div id="punch-buttons">
-    @if (Model.Departments.Count > 1)
-    {
-        <div onclick="window.GNH.hideOnPunchInSelect();">PUNCH IN</div>
-    }
-    else
-    {
-        <div>
-            @Html.ActionLink(@"Punch in", @"PunchIn", @"Kiosk", new
-            {
-                volunteerId = Model.Id,
-                departmentId = Model.Departments.First().Item
-            }, new
-            {
-                @class = @"btn btn-md"
-            })
-        </div>
-    }
-    <div>
-        @Html.ActionLink(@"Punch out", @"PunchOut", @"Kiosk", new
-        {
-            volunteerId = Model.Id,
-        }, new
-        {
-            @class = @"btn btn-md"
-        })</div>
-</div>
-
-<div id="department-select" style="display: none;">
-    @foreach (var department in Model.Departments)
-    {
-        // <a href="/Kiosk/Punch/{volunteerId}/{departmentId}>
-        @Html.ActionLink(department.Display, @"PunchIn", @"Kiosk", new
-        {
-            volunteerId = Model.Id,
-            departmentId = department.Item
-        }, new
-        {
-            @class = @"btn btn-md"
-        })
-    }
-    }
-</div>
-
+<!--suppress CssUnusedSymbol -->
 <style>
 #btn__in {
     background-color:#1adb37;
@@ -58,6 +14,7 @@
     float:left;
     margin-left:18%;
 }
+
 #btn__out {
     background-color:red;
     opacity:0.7;
@@ -75,16 +32,128 @@
 .wrapper {
     text-align:center;
 }
+
+.punch-buttons {
+    margin-top: 50px;
+}
+
+.department-selection-window {
+    font-family:'arial',sans-serif;
+    background-color:whitesmoke;
+    opacity:0.8;
+    text-align:center;
+    border-radius:15px;
+    margin:2em;
+    padding:15px;
+}
+
+#departmentList {
+    color:#0363cc;
+    list-style:none;
+}
+
+.department-button {
+    margin:15px;
+    width:30%;
+    border: 1px solid #0363cc;
+    color:#0363cc;
+    font-size:2em;
+}
+
+.icon {
+    fill:#0363cc;
+}
+
 </style>
 
-<div class="wrapper">
-    <div id="btn__in">
-        <p>IN</p>
+<script type="text/javascript">
+window.GNH = window.GNH || {};
+window.GNH.departmentId = "@(Model.Departments.First().Item)";
+
+window.GNH.punch = (window.GNH.punch || function() {    
+    var url = '@Url.Action(@"PunchIn", @"Kiosk", new
+               {
+                   volunteerId = Model.Id,
+                   departmentId = "XXX",
+                   quantity = "YYY"
+               })';
+      
+    var quantity = "@(Model.IsGroup)".toLowerCase() === "true".toLowerCase() ? window.GNH.getQuantity() : 1;;
+    
+    url = url.replace(/XXX/, window.GNH.departmentId);
+    url = url.replace(/YYY/, quantity.toString());
+    
+    window.location.href = url;
+});
+</script>
+
+<div id="punch-buttons">
+    @{
+        const string punch = @"window.GNH.punch();";
+        const string showQuantitySelect = @"window.GNH.showQuantitySelect();";
+        string onPunchClick;
+        var onDepartmentClick = punch;
+
+        if (Model.Departments.Count == 1)
+        {
+            onPunchClick = Model.IsGroup ? showQuantitySelect : punch;
+        }
+        else
+        {
+            onPunchClick = "window.GNH.hideOnPunchInSelect();";
+            onDepartmentClick = Model.IsGroup ? showQuantitySelect : punch;
+        }
+    }
+    <div class="wrapper">
+        <div id="btn__in"
+             onclick="@onPunchClick">
+            <p>IN</p>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div id="btn__out"
+             onclick="window.location.href='@Url.Action(@"PunchOut", @"Kiosk", new
+                                            {
+                                                volunteerId = Model.Id,
+                                            })'">
+            <p>OUT</p>
+        </div>
     </div>
 </div>
 
-<div class="wrapper">
-    <div id="btn__out">
-        <p>OUT</p>
+<div id="department-select"
+     style="display: none;"
+     class="department-selection-window">
+    <div data-icon="ei-question" data-size="l"></div>
+    <h3>Which department will you be working?</h3>
+    <ul id="departmentList">
+        @foreach (var department in Model.Departments)
+        {
+            <li>
+                <button type="button"
+                        class="btn bg-white department-button"
+                        onclick="window.GNH.departmentId = '@(department.Item)'; @onDepartmentClick">
+                    @department.Display
+                </button>
+            </li>
+        }
+    </ul>
+</div>
+
+<div id="quantity-select"
+     style="display: none;">
+    <div class="quantity-select-window">
+        <div data-icon="ei-question" data-size="l"></div>
+        <h3>How many volunteers are in your group?</h3>
+
+        <div class="btn bg-white" id="decrease" onclick="window.GNH.decreaseValue()" value="Decrease Value">-</div>
+        <input type="number" id="number" value="1"/>
+        <div class="btn bg-white" id="increase" onclick="window.GNH.increaseValue()" value="Increase Value">+</div>
+
+        <button type="button"
+                class="btn btn-primary border-0"
+                onclick="window.GNH.punch();">
+            Enter
+        </button>
     </div>
 </div>
