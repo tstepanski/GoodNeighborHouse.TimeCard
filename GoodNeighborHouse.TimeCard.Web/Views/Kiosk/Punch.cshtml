@@ -1,1 +1,18 @@
 ﻿@model Volunteer
+
+@if (Model.Departments.Count > 1)
+{
+    foreach (var department in Model.Departments)
+    {
+        // <a href="/Kiosk/Punch/{volunteerId}/{departmentId}>
+        @Html.ActionLink(department.Name, @"Punch", @"Kiosk", new
+        {
+            volunteerId = Model.Id,
+            departmentId = department.Id
+        }, new
+        {
+            @class = @"btn btn-md"
+        })
+    }
+}
+

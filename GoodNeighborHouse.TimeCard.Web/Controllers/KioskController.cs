@@ -21,7 +21,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			_volunteerConverter = volunteerConverter;
 		}
 
-		[HttpPost(@"/User/{username}")]
+		[HttpPost(@"User/{username}")]
 		public async Task<IActionResult> SelectUser([FromRoute] string username,
 			CancellationToken cancellationToken = default)
 		{
@@ -35,6 +35,11 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 
 				return View(@"Punch", volunteer);
 			}
+		}
+
+		public Task<IActionResult> Punch()
+		{
+			return null;
 		}
 	}
 }
