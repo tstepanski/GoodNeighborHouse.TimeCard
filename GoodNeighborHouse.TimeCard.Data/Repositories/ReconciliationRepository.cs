@@ -23,5 +23,14 @@ namespace GoodNeighborHouse.TimeCard.Data.Repositories
 				                         reconciliation.PunchOut.PunchTime <= end)
 				.AsAsyncEnumerable();
 		}
+
+        public void ClearAllForVolunteerInPeriod(Guid volunteerId, DateTime start, DateTime end) {
+            var remove = DbSet
+                .Where(reconciliation => reconciliation.PunchIn.PunchTime >= start &&
+                                          reconciliation.PunchIn.VolunteerId == volunteerId &&
+                                          reconciliation.PunchOut.PunchTime <= end &&
+                                          reconciliation.PunchOut.VolunteerId == volunteerId);
+            DbSet.RemoveRange(remove);
+        }
 	}
 }

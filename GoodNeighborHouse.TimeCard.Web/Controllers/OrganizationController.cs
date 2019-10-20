@@ -45,7 +45,21 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			}
 		}
 
-		[HttpPost]
+		[HttpGet]
+        public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
+        {
+            using (var unitOfWork = _unitOfWorkFactory.CreateReadOnly())
+            {
+                var repository = unitOfWork.GetRepository<IOrganizationRepository>();
+                var entity = await Task.Run(() => new OrganizationEntity());
+
+                var organization = _converter.Convert(entity);
+
+                return View(@"Edit", organization);
+            }
+        }
+
+        [HttpPost]
 		public async Task<IActionResult> Create(OrganizationModel organization,
 			CancellationToken cancellationToken = default)
 		{
@@ -84,8 +98,8 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			}
 		}
 
-		[HttpPut]
-		public async Task<IActionResult> Edit([FromBody] OrganizationModel organization,
+		[HttpPost]
+		public async Task<IActionResult> Edit(Guid Id, [Bind("Id,Name")] OrganizationModel organization,
 			CancellationToken cancellationToken = default)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateReadWrite())
@@ -95,7 +109,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 
 				if (entity == null)
 				{
-					return NotFound();
+					entity = new OrganizationEntity();
 				}
 
 				_mapper.MapTo(organization, entity);
@@ -105,7 +119,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 
 				organization = _converter.Convert(entity);
 
-				return View(organization);
+				return RedirectToAction(@"ViewAll");
 			}
 		}
 	}

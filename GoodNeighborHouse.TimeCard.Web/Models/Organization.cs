@@ -6,6 +6,5 @@ namespace GoodNeighborHouse.TimeCard.Web.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
     }
 }
