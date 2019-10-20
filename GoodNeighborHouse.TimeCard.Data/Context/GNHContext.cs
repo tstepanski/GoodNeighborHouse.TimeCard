@@ -83,6 +83,7 @@ namespace GoodNeighborHouse.TimeCard.Data.Context
 			var foreignKeys = modelBuilder
 				.Model
 				.GetEntityTypes()
+				.Where(type => type.ClrType != typeof(DepartmentVolunteer))
 				.SelectMany(type => type.GetForeignKeys());
 
 			foreach (var foreignKey in foreignKeys)
