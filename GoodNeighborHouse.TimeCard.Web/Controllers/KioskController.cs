@@ -52,7 +52,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			}
 		}
 
-		[HttpPost(@"PunchIn/{volunteerId}/{departmentId}")]
+		[HttpGet(@"PunchIn/{volunteerId}/{departmentId}")]
 		public async Task<IActionResult> PunchIn([FromRoute] Guid volunteerId, [FromRoute] Guid departmentId,
 			[FromQuery] int? quantity, CancellationToken cancellationToken = default)
 		{
@@ -90,7 +90,7 @@ namespace GoodNeighborHouse.TimeCard.Web.Controllers
 			}
 		}
 
-		[HttpPost(@"PunchOut/{volunteerId}")]
+		[HttpGet(@"PunchOut/{volunteerId}")]
 		public async Task<IActionResult> PunchOut([FromRoute] Guid volunteerId,
 			CancellationToken cancellationToken = default)
 		{

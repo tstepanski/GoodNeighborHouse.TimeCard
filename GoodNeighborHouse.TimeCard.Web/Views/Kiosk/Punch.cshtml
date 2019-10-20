@@ -1,16 +1,9 @@
 ﻿@model Volunteer
 
-<script type="text/javascript">
-var hideOnPunchInSelect = function() {
-    $("punch-buttons").hide();
-    $("department-select").show();
-};
-</script>
-
 <div id="punch-buttons">
     @if (Model.Departments.Count > 1)
     {
-        <div onclick="hideOnPunchInSelect();">PUNCH IN</div>
+        <div onclick="window.GNH.hideOnPunchInSelect();">PUNCH IN</div>
     }
     else
     {
