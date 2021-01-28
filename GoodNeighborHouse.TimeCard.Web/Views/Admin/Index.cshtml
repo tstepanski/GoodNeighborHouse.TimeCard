@@ -1,0 +1,39 @@
+﻿<div class="form-group">
+    <div class="wrapper">
+            @Html.ActionLink(@"Kiosk", @"Kiosk", @"Admin", null, new
+            {
+                @class = @"btn btn-primary btn-large"
+            })
+       
+    </div>
+    <br/>
+    <div class="wrapper">
+      
+            @Html.ActionLink(@"Admin", @"Admin", @"Admin", new
+            {
+
+            }, new
+            {
+                @class = @"btn btn-primary btn-large"
+            })
+       
+     </div>
+</div>
+    <style>
+       
+    #btn-large {
+    opacity:0.7;
+    width:30%;
+    height:30%;
+    display:inline-block;
+    font-size:6em;
+    font-family:'arial', sans-serif;
+    border-radius:15px;
+    float:left;
+    margin-left:18%;
+    }
+        .wrapper {
+            text-align: center;
+        }
+    </style>
+
