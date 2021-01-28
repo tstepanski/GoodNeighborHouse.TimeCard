@@ -1,0 +1,56 @@
+﻿@using GoodNeighborHouse.TimeCard.Web.Controllers
+@model GoodNeighborHouse.TimeCard.Web.Models.OrganizationReport
+
+@{
+    ViewBag.Title = "YTD Hours by Organization";
+    Layout = "_Layout";
+
+    var organizationItems = new List<SelectListItem>();
+    foreach (var organization in Model.Organizations)
+    {
+        organizationItems.Add(new SelectListItem
+        {
+            Text = organization.Name,
+            Value = organization.Id.ToString(),
+            Selected = Model.OrganizationId == organization.Id
+        });
+    }
+}
+
+
+<h2>@ViewBag.Title</h2>
+@Html.HiddenFor(report => report.OrganizationId)
+
+<div class="form-group">
+    <label>Organization</label><br />
+    @Html.DropDownListFor(report => report.OrganizationId, organizationItems, "Select an Organization", Model.OrganizationId)
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Department</th>
+            <th>Number of Volunteers</th>
+            <th>Hours</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var data in Model.Data)
+        {
+        <tr>
+            <td>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(data.Month)</td>
+            <td>@data.DepartmentName</td>
+            <td>@data.NumberofVolunteers</td>
+            <td>@data.HoursWorked</td>
+        </tr>
+        }
+    <tr>
+        <td>YTD Total</td>
+        <td></td>
+        <td>@Model.YTDVolunteers</td>
+        <td>@Model.YTDHours</td>
+    </tr>
+    </tbody>
+</table>
+

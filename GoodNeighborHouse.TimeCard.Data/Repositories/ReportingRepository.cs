@@ -60,5 +60,48 @@ namespace GoodNeighborHouse.TimeCard.Data.Repositories
 				.ThenBy(report => report.DepartmentName)
 				.AsAsyncEnumerable();
 		}
-	}
+
+        public IAsyncEnumerable<OrganizationYTDReport> GetYTDForOrgAsync(Guid orgId, int year)
+        {
+            return _context
+                .Reconciliations
+                .Where(reconciliation => reconciliation.PunchIn.PunchTime.Year == year &&
+                                         reconciliation.PunchIn.Volunteer.OrganizationId == orgId)
+                .GroupBy(reconciliation => new
+                {
+                    reconciliation.PunchIn.PunchTime.Month,
+                    reconciliation.PunchIn.Volunteer.OrganizationId,
+                    reconciliation.PunchIn.Department.Name,
+                    reconciliation.PunchIn.Quantity
+                })
+                .Select(reconciliations => new
+                {
+                    reconciliations.Key.OrganizationId,
+                    reconciliations.Key.Month,
+                    FirstPunch = reconciliations
+                        .OrderBy(reconciliation => reconciliation.PunchIn.PunchTime)
+                        .First()
+                        .PunchIn,
+                    LastPunch = reconciliations
+                        .OrderBy(reconciliation => reconciliation.PunchOut.PunchTime)
+                        .Last()
+                        .PunchOut,
+                    Quantity = reconciliations.Sum(reconciliation => reconciliation.PunchIn.Quantity),
+                    TotalHoursWorked = reconciliations.Sum(reconciliation => reconciliation.Difference) / MillisecondsPerHour  * reconciliations.Key.Quantity
+                })
+                .Select(orgYTDReport => new OrganizationYTDReport
+                {
+                    DepartmentName = orgYTDReport.FirstPunch.Department.Name,
+                    HoursWorked = orgYTDReport.TotalHoursWorked,
+                    OrgId = orgYTDReport.OrganizationId.Value,
+                    NumberofVolunteers = orgYTDReport.FirstPunch.Quantity,
+                    Month = orgYTDReport.Month
+                })
+                .OrderBy(report => report.Month)
+                .ThenBy(report => report.DepartmentName)
+                .AsAsyncEnumerable();
+        }
+
+
+    }
 }
