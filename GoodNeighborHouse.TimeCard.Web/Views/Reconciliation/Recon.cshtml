@@ -1,0 +1,46 @@
+@model VolunteerAndPunches
+
+<div id="week">
+    @foreach (var dayPunches in Model)
+    {
+        <div class="day-of-the-week">
+            <div class="day-of-the-week-header">
+                @dayPunches.Key.ToString(@"MM/dd/yyyy")
+            </div>
+            <div class="punches-area">
+                @foreach (var punch in dayPunches)
+                {
+                    var deleted = false;
+                    string text;
+
+                    switch (punch)
+                    {
+                        case MissingPunch _:
+                            text = @"Missing Punch";
+                            break;
+                        case Punch realPunch:
+                            text = realPunch.PunchTime.ToString(@"HH:mm");
+                            deleted = realPunch.IsDeleted;
+                            break;
+                        default:
+                            throw new ArgumentException($@"Invalid {nameof(IPunch)} type");
+                    }
+
+                    <div class="punch @{
+                                          if (deleted)
+                                          {
+                                              @Html.Raw(@"deleted-punch")
+                                          }
+                                      }">
+                        @{
+                            var direction = punch.IsClockIn ? @"IN" : @"Out";
+                        }
+
+                        <span class="punch-direction">@direction</span>
+                        <span class="punch-text">@text</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
